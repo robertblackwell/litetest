@@ -1,0 +1,6 @@
+{
+	"bootstrap" : "local.bootstrap.php",
+	"tests":[
+		"suite2.php"
+	]
+}

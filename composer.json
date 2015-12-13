@@ -1,0 +1,29 @@
+
+{
+    "name":"codekiddos/LiteTest",
+    "description": "A lightweight unit testing package - fork of",
+    "keywords": ["tracelightweight", "php", "unit testing"],
+    "type": "library",
+    "homepage": "https://github.com/robertblackwell/lite-test-php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "daneryl",
+            "homepage": "https://github.com/codekiddos"
+        },
+        {
+            "name":"robertblackwell",
+            "homepage":"https://github.com/robertblackwell"
+        }
+    ],
+    
+	"require": {
+        "kevinlebrun/colors.php": "0.*"
+
+     },
+    "autoload": {
+        "psr-0": {
+            "LiteTest": "classes/"
+        }
+    }
+}
