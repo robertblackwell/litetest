@@ -31,3 +31,6 @@ bump:
 dump:
 	echo $(php)
 
+push:
+	git push origin master	
+
