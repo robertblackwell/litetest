@@ -1,5 +1,94 @@
 # Lite Test PHP
 
+This is a fork of the repo [git@github.com:codekiddos/Lite-Test-PHP.git](git@github.com:codekiddos/Lite-Test-PHP.git).
+
+I have made so many changes that I thought it best (and it was easier for me) to make it an independent repo. 
+
+## Update after fork
+
+I copied the original repo because I finally got tired of PHPUnit stopping without any messages, and going back to SimpleTest seemed the wrong move. I found a number of newer style testing frameworks (the `describe` + `it` variety) but that would have meant heavy editing of all my tests. So after some searching I came across `LiteTest` and liked it. Short and straightforward.
+
+However for my purposes it had a couple of holes. 
+
+-	I needed to have multiple bootstrap files as I use the same test suites in a number of different environments and using multiple bootstrap files is the solution I was using with PHPUnit.
+-	I need a way of grouping tests into `suites`, but neede it to be easy to run either the entire suite or a single test.
+
+## So here is what I came up with
+
+Test suites have changed, they are still php files with a class that is derived from `TestCase` and has methods called `test_????`, but they no longer instantiate and call a `TestRunner` object. Instead these `suites` are run via a command line tool.
+
+###command line tool
+
+The __command line tool__ is called `litetest.php` and can be invoked under the following scenarios:
+
+-	it looks for a `litetest.json` file in the current directory from which it gets a default bootstrap file and a default list of test suites to run. If invoked without any options or arguments it uses these defaults.
+-	a different `litetest.json` file can be specified as a command line option through the `-c|--config-file` option. 
+-	the default bootstrap file can be overriden via the `-b|--bootstrap-file` command line option
+-	the test suites listed in `litetest.json` can be overriden by giving a list of php files containing test suites as arguments on the command line.   
+
+Thus I can run the entire test suite against different bootstrap files by simple specifying a different bootstrap in the command line. Thats how my makefile tests different environments.
+
+If I am working on only one test suite and want to run that suite without all the others I simple run
+
+	php litetest.php testsuite.php
+	
+and use the default bootstrap.
+
+### Cli Option parsing
+
+To help with the command line tool I built a small simple cli-option parser which is included in the package.
+
+### Composer
+
+I have added a `composer.json` file to the package so that it can be installed via composer. 
+
+Composers autoloader can now be used instead of the original `LitetestPHP.php`
+if one so chooses. The package tests and the command line tool use composer autoloader. 
+
+### Colors
+
+I replaced the direct use of escape sequences for controlling console colors by
+using the `Colors\Color` class from  `kevinlebrun/colors.php`. 
+
+### Namespace
+
+I introduced the `LiteTest` name space and pushed all the php class files down a level so that the code now lives in `classes/LiteTest/` rather than `classes/`.
+
+### tests
+
+All tests have been updated to work with the "new stuff".
+
+### phar
+
+I have added machinery to make `LiteTest` into a phar for ease of installation.
+
+There is a `makefile` which will do the build using tools in the `scripts` and `build` directories,  and will place the result as `litetest.phar` and `litetest` in the build directory.
+
+`make install` will place the phar as `litetest` into `~\bin`.
+
+The phar file `litetest` is a little bit tricky. While loading test suites it pulls in additional php code in the form of a bootstrap file and test suite files. In order that these new files can use __'their'__ appropriate vendor directory, and composer autoloader the phar avoids using a composer autoloader and directly `requires` its few dependencies.  
+
+The `litetest` package must still be in the `vendor` directory of the code being tested so that the test suites files have access to `LiteTest\Testcase` and other `litetest` classes.
+
+Thus if you make a change any of the `litetest` code you probably need to:
+
+-	`make` and `make install` the phar file,
+-	commit and push the changes to the github repo
+-	 __and__ do a `composer update` in the app you are testing.
+
+for the changes to take effect.
+
+
+### test names
+
+Classes derived from `LiteTest\TestCase` must have the word `Test` on the start  of their name to be considered for testing.
+
+Test methods must has the word `test` at the start of their name (cannot be at the end as internal methods of `LiteTest\TestCase` are already named like that).
+
+In both cases the rule is `case insensitive`. 
+
+# below here is the original readme
+
 ## Quick guide
 
 	// 1. Include Lite Test PHP
