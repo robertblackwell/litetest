@@ -1,6 +1,4 @@
-
 <?php
-
 // require_once dirname(dirname(__DIR__))."/vendor/autoload.php";
 //
 // This is a bit tricky - dont want to use composer autoload during the build of

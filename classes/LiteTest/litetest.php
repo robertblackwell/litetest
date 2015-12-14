@@ -20,8 +20,6 @@
 
 require_once __DIR__."/cli.php";
 
-
-
 class LiteTestCommand implements iCliCommand
 {
 
