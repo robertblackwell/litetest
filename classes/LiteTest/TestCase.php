@@ -62,9 +62,19 @@ class TestCase
 
 		foreach($trace as $execution_point)
 		{
+
+			$assert_funcs =[
+				'assert_true', 
+				'assert_false', 
+				'assert_equal', 
+				'assertEqual', 
+				'assertEquals',
+				'asserTrue',
+				'assertNotNull'
+			];
 			$file = "";
 			$function = $execution_point['function'];
-			if( in_array($function,['assert_true', 'assert_false', 'assert_equal', 'assertEqual', 'assertEquals'] )){
+			if( in_array($function, $assert_funcs )){
 // 				print __METHOD__."FOUND IT\n";
 // 				print __METHOD__." function : ". $execution_point['function'] ."\n";
 // 				print __METHOD__." file : ". $execution_point['file'] ."\n";
@@ -90,18 +100,50 @@ class TestCase
 
 		// $this->temporal_result->set_error_line($line);
 	}
-	public function assertEqual($prove)
+	public function assertNotNull($prove)
+	{
+		if($prove === null) return $this->pass();
+			
+		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+	}		
+	public function assertTrue($prove)
 	{
 		if($prove === true) return $this->pass();
 			
 		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}	
-	public function assertEquals($prove)
+	public function assertFalse($prove)
 	{
-		if($prove === true) return $this->pass();
+		if($prove === false) return $this->pass();
 			
 		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}	
+	public function assertEqual($expected, $prove) 
+	{
+		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
+					."\nequals given:\n".$this->variable_dump($prove);
+					
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove))
+			return $this->fail($fail_message);
+			
+		if($expected == $prove) return $this->pass();
+		
+		return $this->fail($fail_message);	
+	}
+
+	public function assertEquals($expected, $prove) 
+	{
+		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
+					."\nequals given:\n".$this->variable_dump($prove);
+					
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove))
+			return $this->fail($fail_message);
+			
+		if($expected == $prove) return $this->pass();
+		
+		return $this->fail($fail_message);	
+	}
+
 	public function assert_true($prove)
 	{
 		if($prove === true) return $this->pass();
