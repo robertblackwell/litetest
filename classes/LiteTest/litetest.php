@@ -28,6 +28,7 @@ class LiteTestCommand implements iCliCommand
 	const CONFIG_FILE = "config-file";
 	const BOOTSTRAP_FILE = "bootstrap-file";
 	const CONFIG_FILE_NAME= "LiteTest.json";
+	const TEST_CLASS_REGEX="/(^Test|Test$)/i";
 
 	public $cli;
 	public $args;
@@ -46,7 +47,7 @@ class LiteTestCommand implements iCliCommand
 
 	function version()
 	{
-		return "v.0.0.99";
+		return "v.0.0.101";
 	}
 
 	//
@@ -195,7 +196,8 @@ class LiteTestCommand implements iCliCommand
 
 		foreach($classes_to_test as $klass)
 		{
-			if( preg_match("/^Test/", $klass) )
+			// if( preg_match("/^Test/", $klass) )
+			if( preg_match(self::TEST_CLASS_REGEX, $klass) )
 				$testClasses[] = $klass;
 		}
 

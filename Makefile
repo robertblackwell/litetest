@@ -1,24 +1,31 @@
 #makefile
 BINDIR := ~/bin
 BUILDDIR:=	build
+BINNAME := litetest	
 PHARNAME := litetest.phar
 TARGET := 	build/$(PHARNAME)
+
 PHARIZER := scripts/create-phar.php
 SRCPREFIX := `pwd`
 
-php :=  $(shell find classes -type f -name "*.php") $(shell find vendor -type f -name "*.php")  
+php :=  $(shell find classes -type f -name "*.php") $(shell find vendor/kevinlebrun -type f -name "*.php")  
 
 build/litetest: $(TARGET)
 	# take the phar extension off the end
 
 $(TARGET): Makefile $(PHARIZER) $(php)
 	# create the phar
-	$(PHARIZER) $(TARGET) $(SRCPREFIX) classes/Stub.php classes vendor 
+	$(PHARIZER) $(TARGET) $(SRCPREFIX) classes/Stub.php classes vendor/kevinlebrun 
 	#make it executable
 	chmod 775 $(TARGET)
 
 install:
-	cp -v $(TARGET) $(BINDIR)/$(PHARNAME)
+	cp -v $(TARGET) $(BINDIR)/$(BINNAME)
 
 clean:
 	rm -v $(BUILDDIR)/*
+
+dump:
+	echo $(php)
+
+	

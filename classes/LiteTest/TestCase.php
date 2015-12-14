@@ -5,6 +5,11 @@ namespace LiteTest;
 class TestCase
 {
 	const TEST_METHOD_PREFIX = "test_";
+	//
+	// Beware - cannot put _test at the end of a test function name because other
+	// methods in TestCase class have that in their name
+	//
+	const TEST_METHOD_REGEX = "/^test/i";
 	protected $temporal_result;
 	protected $backtraces;
 	
@@ -90,6 +95,14 @@ class TestCase
 		return $this->fail($fail_message);	
 	}
 	
+	//
+	// @TODO - upgrade so that only methods from derived classes
+	//			are considered as test cases. This will allow
+	//			more flexibility in the naming of testcases.
+	// WE can be a little smarter here than the original 
+	// Only test the name against the defined patter 
+	// If the method was actually "declared" in th testcase class
+	//
 	public function get_tests() 
 	{	
 		$reflected_self = new \ReflectionClass($this);
@@ -97,7 +110,18 @@ class TestCase
 		$tests = array();
 		foreach($reflected_self->getMethods() as $one_method) 
 		{	
+
+			$my_klass_name = get_class($this);
+			$declaring_class_name = $one_method->getDeclaringClass()->getName();
+
+			//print "this_name : $my_klass_name declaring_class : {$declaring_class_name} {$one_method->name} \n";
+			// $reflected_method = new \ReflectionMethod(get_class($this), $one_method);
+			// $declaring_klass = $reflected_method->getDeclaringClass()->getName();
+			// print "method: $one_method declared in: $declaring_klass\n";
+			//continue;
+
 			$method_name = $one_method->name;
+			// if( $my_klass_name === $declaring_class_name)
 			if($this->is_test($method_name)) $tests[] = $method_name;
 		}
 		
@@ -106,7 +130,7 @@ class TestCase
 	
 	protected function is_test($method_name)
 	{
-		return (substr($method_name, 0, 5) == self::TEST_METHOD_PREFIX);
+		return (preg_match(self::TEST_METHOD_REGEX, $method_name) == 1);
 	}
 	
 	public function run($testcase)
@@ -123,11 +147,13 @@ class TestCase
 	
 	public function run_one($test_name, $testcase)
 	{
+		// throw new \Exception("got here");
 		$this->temporal_result = new TestResult($test_name);
 		$this->temporal_result->set_testcase($testcase);
 		
 		try
 		{
+			print "{$testcase}::{$test_name} \n";
 			$start_time = microtime(true);
 			$this->before_each();
 			$this->$test_name();
