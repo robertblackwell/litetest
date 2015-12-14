@@ -100,9 +100,15 @@ class TestCase
 
 		// $this->temporal_result->set_error_line($line);
 	}
-	public function assertNotNull($prove)
+	public function assertNull($prove)
 	{
 		if($prove === null) return $this->pass();
+			
+		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+	}			
+	public function assertNotNull($prove)
+	{
+		if($prove !== null) return $this->pass();
 			
 		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}		
