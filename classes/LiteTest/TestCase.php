@@ -10,18 +10,34 @@ class TestCase
 	// methods in TestCase class have that in their name
 	//
 	const TEST_METHOD_REGEX = "/^test/i";
+
+	public $output_verbose;
+	public $output_debug;
+
 	protected $temporal_result;
 	protected $backtraces;
 	
+	function setOutputVerbose($onOff)
+	{
+		$this->output_verbose = $onOff;
+	}
+	function setOutputDebug($onOff)
+	{
+		$this->output_debug = $onOff;
+	}
+
 	public function pass()
 	{
+		if($this->output_verbose) print ".";
+
 		$this->temporal_result->add_assertion(true);
-		$this->temporal_result->add_backtrace(true);
 		return true;
 	}
 	
 	public function fail($message)
 	{
+		if( $this->output_verbose) print "F";
+
 		$exception = new \Exception($message);
 		$this->store_exception($exception);
 		return false;
@@ -29,8 +45,12 @@ class TestCase
 	
 	protected function store_exception(\Exception $exception)
 	{
-		$this->temporal_result->add_assertion(false, $exception);
-		$this->find_error_line($exception);
+
+		list($error_line, $error_file) = $this->find_error_line($exception);
+
+		// print __METHOD__." line : $error_line file : $error_file \n";
+		
+		$this->temporal_result->add_assertion(false, $exception, $error_line, $error_file);
 	}
 	
 	protected function find_error_line(\Exception $exception)
@@ -38,7 +58,8 @@ class TestCase
 		$trace = $exception->getTrace();
 		$line = "Unknown line";
 		$case_name = get_class($this);
-		
+		$file = "";
+
 		foreach($trace as $execution_point)
 		{
 			$file = "";
@@ -64,8 +85,10 @@ class TestCase
 // 				break;
 // 			}
 		}
-		
-		$this->temporal_result->set_error_line($line);
+		// print __METHOD__." line : $line  file: $file \n";
+		return [$line,$file]; 
+
+		// $this->temporal_result->set_error_line($line);
 	}
 	
 	public function assert_true($prove)
@@ -153,7 +176,7 @@ class TestCase
 		
 		try
 		{
-			print "{$testcase}::{$test_name} \n";
+			print "\n{$testcase}::{$test_name} \n";
 			$start_time = microtime(true);
 			$this->before_each();
 			$this->$test_name();
@@ -166,7 +189,8 @@ class TestCase
 		$this->after_each();
 		$result_time = microtime(true) - $start_time;
 		$this->temporal_result->set_running_time($result_time);		
-
+		// $r = ($this->temporal_result->passed())? "P":"F";
+		// print " $testcase::$test_name ". ($r)."\n";
 		return $this->temporal_result;
 	}
 	

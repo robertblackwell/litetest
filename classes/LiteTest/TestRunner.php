@@ -6,9 +6,23 @@ abstract class TestRunner
 {
 	public $test_cases = array();
 	public $test_results = array();
-	
+
+	public $output_verbose;
+	public $output_debug;
+
+
 	const PASS = "PASS";
 	const FAIL = "FAIL";
+
+	public function setOutputVerbose($onOff)
+	{
+		$this->output_verbose = $onOff;
+	}	
+
+	public function setOutputDebug($onOff)
+	{
+		$this->output_debug = $onOff;		
+	}
 	
 	public function add_test_case(TestCase $test_case)
 	{

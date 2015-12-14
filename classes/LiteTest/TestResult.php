@@ -39,14 +39,15 @@ class TestResult
 		$this->testcase = $testcase;
 	}
 	
-	public function add_assertion($result, \Exception $exception = null)
+	public function add_assertion($result, \Exception $exception = null, $line_number=-1, $file_name="")
 	{
-		$this->assertions[] = array(self::RESULT => $result, self::EXCEPTION => $exception);
+
+		// $msg = ($exception === null )? "NULL" : $exception->getMessage();
+		// print __METHOD__."$result, $msg,  $line_number\n";
+		$this->assertions[] = new Assertion($result, $exception, $line_number, $file_name);
+		// $this->assertions[] = array(self::RESULT => $result, self::EXCEPTION => $exception);
 	}
-	public function add_backtrace($result, $backtrace=null)
-	{
-		$this->backtraces  [] = [self::RESULT => $backtrace, "BACKTRACE" => $backtrace];
-	}
+
 	public function count_assertions()
 	{
 		return sizeof($this->assertions);
@@ -56,7 +57,7 @@ class TestResult
 	{
 		foreach($this->assertions as $index => $one_assertion)
 		{
-			if($test_failed = !$one_assertion[self::RESULT]) return false;
+			if($test_failed = !$one_assertion->result) return false;
 		}
 		
 		return true;
@@ -64,6 +65,7 @@ class TestResult
 	
 	public function get_exception()
 	{
+		throw new \Exception("deprecated");
 		foreach($this->assertions as $index => $one_assertion)
 		{
 			if($test_failed = !$one_assertion[self::RESULT]) 

@@ -245,13 +245,23 @@ Class Cli
    		}
 	}
 
+	private function getOptionDefinition($key)
+	{
+		//
+		// key is either long or short name
+		//
+		if( strlen($key) == 1 )
+			return $this->isShortName($key);
+		return $this->isLongName($key);
+	}
+
     //
     // breaks argv out into options, their values and arguments after the options
     // places the reult in this->parsed_options and $this->arguments
     //
 	private function parse( $my_arg = null ) {
-		$cmd_args = array();
-		$skip = array();
+		$cmd_args = [];
+		$skip = [];
 		$args = [];
 
 		global $argv;
@@ -265,7 +275,6 @@ Class Cli
 			if ( in_array( $idx, $skip ) ) {
 			   continue;
 			}
-
 			$arg = preg_replace( '#\s*\=\s*#si', '=', $arg );
 			$arg = preg_replace( '#(--+[\w-]+)\s+[^=]#si', '${1}=', $arg );
 
@@ -276,17 +285,32 @@ Class Cli
 				if ($eqPos === false) 
 				{
 					$key = trim($arg, '- ');
+					$opt_def = $this->getOptionDefinition($key);
+					if( $opt_def === null )
+						throw new \Exception("invalid option $key");
+					//
+					// Incase we have seen it before
+					//
 					$val = isset($cmd_args[$key]);
 
 					// We handle case: --user-id 123 -> this is a long option with a value passed.
 					// the actual value comes as the next element from the array.
 					// We check if the next element from the array is not an option.
-					if ( isset( $new_argv[ $idx + 1 ] ) && ! preg_match('#^-#si', $new_argv[ $idx + 1 ] ) ) 
+					//
+					// However we must check to see if the option we are working on is:
+					//	-	requires a value
+					//	-	does not allow a value
+					//	-	value is optional - we dont support this one
+					//
+					if( $opt_def->valueRequired )
 					{
-						$cmd_args[$key] = trim( $new_argv[ $idx + 1 ] );
-						$skip[] = $idx;
-						$skip[] = $idx + 1;
-						continue;
+						if ( isset( $new_argv[ $idx + 1 ] ) && ! preg_match('#^-#si', $new_argv[ $idx + 1 ] ) ) 
+						{
+							$cmd_args[$key] = trim( $new_argv[ $idx + 1 ] );
+							$skip[] = $idx;
+							$skip[] = $idx + 1;
+							continue;
+						}
 					}
 
                    $cmd_args[$key] = $val;
@@ -399,7 +423,7 @@ Class Cli
 
 }
 
-/*
+
 
 class Dummy implements iCliCommand
 {
@@ -418,6 +442,7 @@ class Dummy implements iCliCommand
 	}
 }
 
+/*
 
 $cli = new Cli();
 $cli->addOption()
@@ -436,7 +461,14 @@ $cli->addOption()
 
 $cli->addOption()
 	->shortName("v")->longName("verbose")
+	->valueRequired(false)
 	->key('verbose')
+	->description("verbose")->valueRequired(false);
+
+$cli->addOption()
+	->shortName("d")->longName("debug")
+	->valueRequired(false)
+	->key('debug')
 	->description("verbose")->valueRequired(false);
 
 $cli->command(new Dummy())
@@ -446,6 +478,5 @@ $cli->command(new Dummy())
 	->help("Runs php test cases with LiteTest framework");
 
 $cli->run($argv);
-
 
 */

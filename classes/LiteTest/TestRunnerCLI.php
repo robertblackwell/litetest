@@ -28,8 +28,8 @@ class TestRunnerCLI extends TestRunner
 	
 	public function print_results()
 	{
-		system("clear");
-		
+		// system("clear");
+
 		$this->run();
 		
 		foreach($this->get_results() as $case_name => $test_results)
@@ -56,7 +56,10 @@ class TestRunnerCLI extends TestRunner
 		foreach($test_results as $one_result)
 		{
 			$this->total_assertions += $one_result->count_assertions();
-			
+			// foreach($one_result->assertions as $assertion){
+			// 	print "assertion: ".$assertion->result_string."\n";
+			// }
+			echo PHP_EOL;
 			if($one_result->passed())
 			{
 				$this->total_results++;
@@ -89,8 +92,6 @@ class TestRunnerCLI extends TestRunner
 	{
 		$case_name = $result->get_testcase();
 		$running_time = $this->format_time($result->get_running_time());
-		$exception = $result->get_exception();
-		$line = $result->get_error_line();
 
 		$c = new Color();
 		
@@ -105,8 +106,19 @@ class TestRunnerCLI extends TestRunner
 
 		echo $line;
 
-		echo $exception->getMessage().PHP_EOL;
-		echo $exception->getTraceAsString().PHP_EOL;
+		foreach($result->assertions as $assertion)
+		{
+			if( ! $assertion->result )
+			{
+				$exception  = $assertion->exception;
+				echo $exception->getMessage() . "AT ". $assertion->file_name ."]::" . $assertion->line_number."\n";
+				if( $this->output_debug )
+				{
+					echo $exception->getTraceAsString().PHP_EOL;
+				}
+			}
+		}
+
 	}
 	
 	protected function format_time($time)

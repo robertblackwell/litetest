@@ -157,6 +157,9 @@ class LiteTestCommand implements iCliCommand
 		$this->cwd = getcwd();
 		$this->debug = false;
 
+		// print_r($cli->getOptions());
+		// print_r($cli->getArguments());
+
 		$this->setup();
 		if( $this->debug ) print __METHOD__." after setup \n";
 
@@ -203,9 +206,17 @@ class LiteTestCommand implements iCliCommand
 
 		$runner = new \LiteTest\TestRunnerCLI();
 
+		$runner->setOutputDebug($this->cli->getOptionValue('debug'));
+		$runner->setOutputVerbose($this->cli->getOptionValue('verbose'));
+
 		foreach($testClasses as $suite)
 		{
-			$runner->add_test_case(new $suite());
+			$suite_obj = new $suite();
+
+			$suite_obj->setOutputDebug($this->cli->getOptionValue('debug'));
+			$suite_obj->setOutputVerbose($this->cli->getOptionValue('verbose'));
+
+			$runner->add_test_case($suite_obj);
 		}
 
 		$runner->print_results();
@@ -229,13 +240,17 @@ $cli->addOption()
 	->description("php bootstrap file");
 
 $cli->addOption()
-	->shortName("v")->longName("verbose")
+	->shortName("v")
+	// ->longName("verbose")
 	->key('verbose')
+	->valueRequired(false)
 	->description("verbose")->valueRequired(false);
 
 $cli->addOption()
-	->shortName("d")->longName("debug")
+	->shortName("d")
+	// ->longName("debug")
 	->key('debug')
+	->valueRequired(false)
 	->description("debug")->valueRequired(false);
 
 $cli->command(new LiteTestCommand())
