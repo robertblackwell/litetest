@@ -2,5 +2,5 @@
 namespace LiteTest;
 class Version
 {
-	public static $version = "0.0.18";
+	public static $version = "0.0.19";
 }
