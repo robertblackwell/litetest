@@ -32,6 +32,8 @@ class TestRunnerCLI extends TestRunner
 
 		$this->run();
 		
+		echo PHP_EOL;
+
 		foreach($this->get_results() as $case_name => $test_results)
 		{
 			$this->print_case_results($case_name, $test_results);
@@ -59,7 +61,6 @@ class TestRunnerCLI extends TestRunner
 			// foreach($one_result->assertions as $assertion){
 			// 	print "assertion: ".$assertion->result_string."\n";
 			// }
-			echo PHP_EOL;
 			if($one_result->passed())
 			{
 				$this->total_results++;

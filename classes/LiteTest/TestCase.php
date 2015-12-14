@@ -235,7 +235,7 @@ class TestCase
 		
 		try
 		{
-			print "\n{$testcase}::{$test_name} \n";
+			print "\n{$testcase}::{$test_name} ";
 			$start_time = microtime(true);
 			$this->before_each();
 			$this->setUp();
@@ -260,7 +260,7 @@ class TestCase
 
 	public function after_each(){}
 	public function tearDown(){}
-	
+
 	protected function variable_dump($subject)
 	{
 		ob_start();
