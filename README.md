@@ -1,8 +1,8 @@
-# Lite Test PHP
+# litetest - a PHP unit tester
 
 This is a fork of the repo [git@github.com:codekiddos/Lite-Test-PHP.git](git@github.com:codekiddos/Lite-Test-PHP.git).
 
-I have made so many changes that I thought it best (and it was easier for me) to make it an independent repo. 
+But it does not follow the usual practice for github forks. I have made so many changes that I thought it best (and it was easier for me) to make it an independent repo. 
 
 ## Update after fork
 
@@ -11,15 +11,19 @@ I copied the original repo because I finally got tired of PHPUnit stopping witho
 However for my purposes it had a couple of holes. 
 
 -	I needed to have multiple bootstrap files as I use the same test suites in a number of different environments and using multiple bootstrap files is the solution I was using with PHPUnit.
--	I need a way of grouping tests into `suites`, but neede it to be easy to run either the entire suite or a single test.
+-	I need a way of grouping tests into `suites`, but needed it to be easy to run either the entire suite or a single test.
 
 ## So here is what I came up with
 
-Test suites have changed, they are still php files with a class that is derived from `TestCase` and has methods called `test_????`, but they no longer instantiate and call a `TestRunner` object. Instead these `suites` are run via a command line tool.
+Test suites have changed.
+
+They are still php files with a class that is derived from `TestCase` and has methods called `test_????`, but they no longer instantiate and call a `TestRunner` object. 
+
+Instead these `suites` are run via a command line tool.
 
 ###command line tool
 
-The __command line tool__ is called `litetest.php` and can be invoked under the following scenarios:
+The __command line tool__ is called `litetest` and can be run under the following scenarios:
 
 -	it looks for a `litetest.json` file in the current directory from which it gets a default bootstrap file and a default list of test suites to run. If invoked without any options or arguments it uses these defaults.
 -	a different `litetest.json` file can be specified as a command line option through the `-c|--config-file` option. 
@@ -30,7 +34,7 @@ Thus I can run the entire test suite against different bootstrap files by simple
 
 If I am working on only one test suite and want to run that suite without all the others I simple run
 
-	php litetest.php testsuite.php
+	litetest testsuite.php
 	
 and use the default bootstrap.
 
@@ -43,7 +47,7 @@ To help with the command line tool I built a small simple cli-option parser whic
 I have added a `composer.json` file to the package so that it can be installed via composer. 
 
 Composers autoloader can now be used instead of the original `LitetestPHP.php`
-if one so chooses. The package tests and the command line tool use composer autoloader. 
+if one so chooses. The package tests and the command line tool use composer autoloader. __NOTE__ : see below for more details as the phar version of the command line tool does not use composer. 
 
 ### Colors
 
@@ -60,13 +64,19 @@ All tests have been updated to work with the "new stuff".
 
 ### phar
 
-I have added machinery to make `LiteTest` into a phar for ease of installation.
+I have added machinery to make `litetest` into a phar for ease of installation.
 
-There is a `makefile` which will do the build using tools in the `scripts` and `build` directories,  and will place the result as `litetest.phar` and `litetest` in the build directory.
+There is a `makefile` which will do the build using tools in the `scripts` and `build` directories,  and will place the result as `litetest.phar` and `litetest` in the `build` directory.
 
 `make install` will place the phar as `litetest` into `~\bin`.
 
-The phar file `litetest` is a little bit tricky. While loading test suites it pulls in additional php code in the form of a bootstrap file and test suite files. In order that these new files can use __'their'__ appropriate vendor directory, and composer autoloader the phar avoids using a composer autoloader and directly `requires` its few dependencies.  
+The phar file `litetest` is a little bit tricky. 
+
+While loading test suites it pulls in additional php code in the form of a bootstrap file and test suite files. 
+
+In most scenarios one would want to use the `vendor` directory and composers's autoloader appropriate to these 'other' php file, specifically the ones for the app you are testing.
+
+Trying to use an apps autoloader with one for the command line tool gave a conflict, so rather than work through the problem I simply avoided it by directly `require`ing the few dependencies that `litetest` has.  
 
 The `litetest` package must still be in the `vendor` directory of the code being tested so that the test suites files have access to `LiteTest\Testcase` and other `litetest` classes.
 
@@ -78,6 +88,21 @@ Thus if you make a change any of the `litetest` code you probably need to:
 
 for the changes to take effect.
 
+### how to use
+
+The way I use the package is to
+
+-	clone the repo into a folder that is not part of any app and 
+
+		make 
+		make install
+	to put the phar file in `~/bin`. This is a lazy global install.
+
+-	add 
+
+		"robertblackwell/litetest":"dev-master" 
+		
+	to my apps composer.json
 
 ### test names
 
@@ -86,6 +111,14 @@ Classes derived from `LiteTest\TestCase` must have the word `Test` on the start 
 Test methods must has the word `test` at the start of their name (cannot be at the end as internal methods of `LiteTest\TestCase` are already named like that).
 
 In both cases the rule is `case insensitive`. 
+
+### assert
+
+I have added additional `assertXXX` function to make my transition from PHPUnit and SimpleTest easier.
+
+The additions are `assertEquals`, `assertEqual`, `assertTrue`, `assertFalse`, `assertNotNull` and `assertNull`.
+
+Thats pretty much all I ever use.
 
 # below here is the original readme
 
