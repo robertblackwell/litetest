@@ -13,7 +13,7 @@ php :=  $(shell find classes -type f -name "*.php") $(shell find vendor/kevinleb
 build/litetest: $(TARGET)
 	# take the phar extension off the end
 
-$(TARGET): Makefile $(PHARIZER) $(php)
+$(TARGET): Makefile $(PHARIZER) $(php) bump
 	# create the phar
 	$(PHARIZER) $(TARGET) $(SRCPREFIX) classes/Stub.php classes vendor/kevinlebrun 
 	#make it executable
@@ -25,7 +25,9 @@ install:
 clean:
 	rm -v $(BUILDDIR)/*
 
+bump:
+	./build/bump.php
+
 dump:
 	echo $(php)
 
-	

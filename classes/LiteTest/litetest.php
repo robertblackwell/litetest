@@ -19,6 +19,7 @@
 //
 
 require_once __DIR__."/cli.php";
+require_once __DIR__."/Version.php";
 
 class LiteTestCommand implements iCliCommand
 {
@@ -45,6 +46,7 @@ class LiteTestCommand implements iCliCommand
 
 	function version()
 	{
+		return "v". LiteTest\Version::$version;
 		return "v.0.0.101";
 	}
 
