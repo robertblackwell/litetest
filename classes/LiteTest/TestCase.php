@@ -238,6 +238,7 @@ class TestCase
 			print "\n{$testcase}::{$test_name} \n";
 			$start_time = microtime(true);
 			$this->before_each();
+			$this->setUp();
 			$this->$test_name();
 		}
 		catch(Exception $exception)
@@ -246,6 +247,7 @@ class TestCase
 		}
 
 		$this->after_each();
+		$this->tearDown();
 		$result_time = microtime(true) - $start_time;
 		$this->temporal_result->set_running_time($result_time);		
 		// $r = ($this->temporal_result->passed())? "P":"F";
@@ -254,7 +256,10 @@ class TestCase
 	}
 	
 	public function before_each(){}
+	public function setUp(){}
+
 	public function after_each(){}
+	public function tearDown(){}
 	
 	protected function variable_dump($subject)
 	{
