@@ -64,7 +64,7 @@ class TestCase
 		{
 			$file = "";
 			$function = $execution_point['function'];
-			if( in_array($function,['assert_true', 'assert_false', 'assert_equal'] )){
+			if( in_array($function,['assert_true', 'assert_false', 'assert_equal', 'assertEqual', 'assertEquals'] )){
 // 				print __METHOD__."FOUND IT\n";
 // 				print __METHOD__." function : ". $execution_point['function'] ."\n";
 // 				print __METHOD__." file : ". $execution_point['file'] ."\n";
@@ -90,7 +90,18 @@ class TestCase
 
 		// $this->temporal_result->set_error_line($line);
 	}
-	
+	public function assertEqual($prove)
+	{
+		if($prove === true) return $this->pass();
+			
+		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+	}	
+	public function assertEquals($prove)
+	{
+		if($prove === true) return $this->pass();
+			
+		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+	}	
 	public function assert_true($prove)
 	{
 		if($prove === true) return $this->pass();
