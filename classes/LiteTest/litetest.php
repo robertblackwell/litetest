@@ -26,7 +26,9 @@ class LiteTestCommand implements iCliCommand
 
 	const CONFIG_FILE = "config-file";
 	const BOOTSTRAP_FILE = "bootstrap-file";
-	const CONFIG_FILE_NAME= "LiteTest.json";
+	// const CONFIG_FILE_NAME= "litetest.json";
+	// const CONFIG_FILE_NAME= "litetest.ini";
+	const CONFIG_FILE_NAME= "litetest.config.php";
 	const TEST_CLASS_REGEX="/(^Test|Test$)/i";
 
 	public $cli;
@@ -38,9 +40,11 @@ class LiteTestCommand implements iCliCommand
 	public $config_file_path;
 	public $debug;
 
-	function throw_fatal_error($msg)
+	function throw_fatal_error($msg, $e=null)
 	{
-		print "ERROR : $msg ".PHP_EOL.PHP_EOL;
+		print "XXERROR : $msg ".PHP_EOL.PHP_EOL;
+		if( ! is_null($e) )
+			print $e->getTraceAsString();
 		exit();
 	}
 
@@ -77,9 +81,18 @@ class LiteTestCommand implements iCliCommand
 			$this->throw_fatal_error("config file (". self::CONFIG_FILE .") required ");
 		}
 
-		$this->config = json_decode(file_get_contents($this->config_file_path));
+		$tmp_config = include $this->config_file_path;
 
-		if( $this->config === null )
+		//
+		// cast the config array to a stdClass object
+		//
+		$this->config = (object) $tmp_config;
+
+		// $this->config = json_decode(json_encode($tmp_config), false);
+		// $this->config = parse_ini_file($this->config_file_path, true);
+		// $this->config = json_decode(file_get_contents($this->config_file_path));
+
+		if( ($this->config === null) || ($this->config === false) )
 		{
 			$this->throw_fatal_error("no content for config file, possible json error");
 		}
@@ -156,6 +169,7 @@ class LiteTestCommand implements iCliCommand
 		$this->args = $cli->getArguments();
 		$this->cwd = getcwd();
 		$this->debug = false;
+		$this->debug = $cli->getOptionValue('debug') ;
 
 		// print_r($cli->getOptions());
 		// print_r($cli->getArguments());
@@ -176,18 +190,21 @@ class LiteTestCommand implements iCliCommand
 			{
 
 				if( $this->debug ) print "Loading bootstrap : $this->bootstrap_file\n";
-				require($this->bootstrap_file);
+				include($this->bootstrap_file);
 			}
 
 			foreach($this->tests as $test_file)
 			{
-				if( $this->debug ) print "loading : $test_file \n";
-				require_once($this->tests_relative_to."/".$test_file);
+				$fn = $this->tests_relative_to."/".$test_file;
+				if( $this->debug ) print "loading : $fn \n";
+				error_reporting(-1);
+				include $fn;
+				if( $this->debug ) print "loaded : $fn \n";
 			}
 		}
 		catch(\Exception $e)
 		{
-			$this->throw_fatal_error($e->getMessage());
+			$this->throw_fatal_error($e->getMessage(), $e);
 		}
 
 		$testClasses = [];
@@ -196,13 +213,21 @@ class LiteTestCommand implements iCliCommand
 
 		$classes_to_test = array_diff($after, $before_classes);
 
+		// print __METHOD__."\n";
+		// print_r($classes_to_test);
+		// print __METHOD__."\n";
 
 		foreach($classes_to_test as $klass)
 		{
 			// if( preg_match("/^Test/", $klass) )
-			if( preg_match(self::TEST_CLASS_REGEX, $klass) )
+			if( preg_match(self::TEST_CLASS_REGEX, $klass) ){
 				$testClasses[] = $klass;
+				if($this->debug ) print " class : $klass added as test case \n";
+			}else{
+				if($this->debug ) print " class : $klass REJECTED as test case \n";				
+			}
 		}
+
 
 		$runner = new \LiteTest\TestRunnerCLI();
 
@@ -218,6 +243,32 @@ class LiteTestCommand implements iCliCommand
 
 			$runner->add_test_case($suite_obj);
 		}
+		//
+		// Test for empty set of tests
+		//
+		$cc = new Colors\Color();
+		if( count($testClasses) == 0 )
+		{
+			echo $cc("WARNING ")->red()->bold();
+			echo $cc("  No classes have been named to be test Suites (Test????) - ")->reset();
+			echo $cc(" is this correct !!")->white()->bold();
+			echo "\n";
+		}
+		else
+		{
+			foreach($runner->get_test_cases() as $obj)
+			{
+				$arr = $obj->get_tests();
+				if( count($arr) == 0){
+					echo  $cc("WARNING")->red()->bold();					
+					echo  $cc(" class ")->reset();
+					echo  $cc(get_class($obj))->cyan()->bold();
+					echo  $cc(" has no tests method (test_???) - ")->reset();
+					echo  $cc(" is this correct ")->white()->bold();
+					echo  "\n "; 
+				}
+			}
+		}		
 
 		$runner->print_results();
 	}

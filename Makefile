@@ -21,6 +21,7 @@ $(TARGET): Makefile $(PHARIZER) $(php) bump
 
 install:
 	cp -v $(TARGET) $(BINDIR)/$(BINNAME)
+	cp -v $(TARGET) $(BUILDDIR)/$(BINNAME)
 
 clean:
 	rm -v $(BUILDDIR)/*

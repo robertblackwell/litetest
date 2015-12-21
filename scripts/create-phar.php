@@ -1,4 +1,4 @@
-#!/usr/local/opt/php55/bin/php
+#!/usr/bin/env php
 <?php
 require_once(dirname(__FILE__)."/PHPFiles.php");
 /*

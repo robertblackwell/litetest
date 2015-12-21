@@ -6,6 +6,7 @@
     "type": "library",
     "homepage": "https://github.com/robertblackwell/litetest",
     "license": "MIT",
+    "bin": ["build/litetest.phar", "build/litetest"],
     "authors": [
         {
             "name":"robertblackwell",

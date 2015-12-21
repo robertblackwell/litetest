@@ -25,8 +25,8 @@ Instead these `suites` are run via a command line tool.
 
 The __command line tool__ is called `litetest` and can be run under the following scenarios:
 
--	it looks for a `litetest.json` file in the current directory from which it gets a default bootstrap file and a default list of test suites to run. If invoked without any options or arguments it uses these defaults.
--	a different `litetest.json` file can be specified as a command line option through the `-c|--config-file` option. 
+-	it looks for a `litetestconfig.php` file in the current directory from which it gets a default bootstrap file and a default list of test suites to run. If invoked without any options or arguments it uses these defaults. __NOTE__, this was until recently a `json` file but I got tired of not being able to put comments in the config file, and in any case modern php syntax is no worse than json.
+-	a different `litetest.config.php` file can be specified as a command line option through the `-c|--config-file` option. 
 -	the default bootstrap file can be overriden via the `-b|--bootstrap-file` command line option
 -	the test suites listed in `litetest.json` can be overriden by giving a list of php files containing test suites as arguments on the command line.   
 

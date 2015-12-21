@@ -1,5 +1,5 @@
 {
-	"bootstrap" : "local.bootstrap.php",
+	"bootstrap" : "stage.bootstrap.php",
 	"tests":[
 		"suite2.php"
 	]

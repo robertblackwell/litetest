@@ -238,7 +238,9 @@ Class Cli
    		$this->command->object->execute($this, $this->parsed_options, $this->arguments);
    		} catch(\Exception $e){
    			$c = new Colors\Color();
-   			print $c("ERROR: ")->red()->bold() ." ". $c($e->getMessage())->cyan()."\n";
+   			print $c("ERROR: ")->red()->bold();
+   			print " ". $c($e->getMessage())->cyan()."\n";
+   			print $e->getTraceAsString();
 
    		}
 	}
