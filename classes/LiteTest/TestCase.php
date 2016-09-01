@@ -149,7 +149,18 @@ class TestCase
 		
 		return $this->fail($fail_message);	
 	}
-
+	public function assertNotEqual($expected, $prove) 
+	{
+		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
+					."\ndoes NOT equals given:\n".$this->variable_dump($prove);
+					
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected === $prove))
+			return $this->fail($fail_message);
+			
+		if($expected != $prove) return $this->pass();
+		
+		return $this->fail($fail_message);	
+	}
 	public function assert_true($prove)
 	{
 		if($prove === true) return $this->pass();

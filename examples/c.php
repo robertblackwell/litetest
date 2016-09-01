@@ -13,12 +13,18 @@ class Kolor extends Colors\Color
 
 $c = new Kolor();
 $c = new Colors\Color;
+
+function color($string)
+{
+	return new Colors\Color($string);
+}
+
 echo 
-	$c('Hello World!')->red()->white() 
-	. $c("some other text 1 ")->green() 
-	. $c("some other text 2 ")->blue() 
-	. $c("some other text 3 ")->yellow() 
-	. $c("some other text 4 ")->white() 
+	color('Hello World!')->red()->white() 
+	. color("some other text 1 ")->green() 
+	. color("some other text 2 ")->blue() 
+	. color("some other text 3 ")->yellow() 
+	. color("some other text 4 ")->white() 
 	. PHP_EOL;
 
 exit();
