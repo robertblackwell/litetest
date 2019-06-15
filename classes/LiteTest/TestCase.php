@@ -246,7 +246,7 @@ class TestCase
 		
 		try
 		{
-			print "\n{$testcase}::{$test_name} ";
+			// print "\n{$testcase}::{$test_name} ";
 			$start_time = microtime(true);
 			$this->before_each();
 			$this->setUp();

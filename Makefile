@@ -27,7 +27,7 @@ clean:
 	rm -v $(BUILDDIR)/*
 
 bump:
-	./build/bump.php
+	./tools/bump.php
 
 dump:
 	echo $(php)
