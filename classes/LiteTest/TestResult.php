@@ -1,7 +1,10 @@
 <?php
 
 namespace LiteTest;
-
+/**
+ * Holds the result for the execution of a single testcase
+ * and all the tests inside that testcase
+ */
 class TestResult 
 {
 	const RESULT = "result";
@@ -9,6 +12,7 @@ class TestResult
 	
 	public $name;
 	public $assertions = array();
+	public $assertion_frames;
 	public $backtraces = [];
 	public $error_line;
 	public $running_time = 0;
@@ -17,6 +21,8 @@ class TestResult
 	public function __construct($name)
 	{
 		$this->set_name($name);
+		$this->assertions = [];
+		$this->assertion_frames = [];
 	}
 	
 	public function get_name()
@@ -38,7 +44,10 @@ class TestResult
 	{
 		$this->testcase = $testcase;
 	}
-	
+	public function add_assertion_frame($frame)
+	{
+		$this->assertion_frames[] = $frame;
+	}
 	public function add_assertion($result, \Exception $exception = null, $line_number=-1, $file_name="")
 	{
 
@@ -65,11 +74,14 @@ class TestResult
 	
 	public function get_exception()
 	{
-		throw new \Exception("deprecated");
+		// throw new \Exception("deprecated");
+		
 		foreach($this->assertions as $index => $one_assertion)
 		{
-			if($test_failed = !$one_assertion[self::RESULT]) 
-				return $one_assertion[self::EXCEPTION];
+			$x = $one_assertion->result;
+			$test_failed = !$one_assertion->result;
+			if($test_failed) 
+				return $one_assertion->exception;
 		}
 	}
 	

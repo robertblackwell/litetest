@@ -1,14 +1,22 @@
 <?php
 
 class TestTestCase extends LiteTest\TestCase 
-{	
+{
+	function assert_pass_fail($test_case, bool $pass_fail)
+	{
+		$dummy = end($test_case->temporal_result->assertion_frames);
+		$d = $dummy->passed;
+		assert($d === $pass_fail);
+	}	
 	function test_pass()
 	{
 		$test_case = new TestingTestCase();
 		$test_case->temporal_result = new LiteTest\TestResult("some test");
 		
-		$this->assert_true($test_case->pass());
-		$this->assert_equals(1, $test_case->temporal_result->count_assertions());
+		$test_case->pass();
+		assert(end($test_case->temporal_result->assertion_frames)->passed === true);		
+
+		assert(1 === $test_case->temporal_result->count_assertions());
 	}
 	
 	function test_fail()
@@ -16,10 +24,12 @@ class TestTestCase extends LiteTest\TestCase
 		$test_case = new TestingTestCase();
 		$test_case->temporal_result = new LiteTest\TestResult("some test");
 		
-		$this->assert_false($test_case->fail("Failure message"));
-		$this->assert_equals(1, $test_case->temporal_result->count_assertions());
+		$test_case->fail("Failure message");
+		assert(end($test_case->temporal_result->assertion_frames)->passed === false);		
+
+		assert(1 === $test_case->temporal_result->count_assertions());
 		
-		$this->assert_equals("Failure message", $test_case->temporal_result->get_exception()->getMessage());
+		assert("Failure message" === end($test_case->temporal_result->assertion_frames)->args[0]);
 	}
 	
 	function test_assert_true()
@@ -27,11 +37,15 @@ class TestTestCase extends LiteTest\TestCase
 		$test_case = new TestingTestCase();
 		$test_case->temporal_result = new LiteTest\TestResult("some test");
 		
-		$this->assert_true($test_case->assert_true(true));
-		
-		$this->assert_false($test_case->assert_true(false));
-		$expected = "Failed asserting true for bool(false)\n";
-		$this->assert_equals($expected, $test_case->temporal_result->get_exception()->getMessage());
+		$test_case->assert_true(true);
+		$dummy = end($test_case->temporal_result->assertion_frames);
+		$d = $dummy->passed;
+		assert($d === true);
+
+		$test_case->assert_true(false);
+		$dummy = end($test_case->temporal_result->assertion_frames);
+		$d = $dummy->passed;
+		assert($d === false);
 	}
 	
 	function test_assert_false()
@@ -39,11 +53,15 @@ class TestTestCase extends LiteTest\TestCase
 		$test_case = new TestingTestCase();
 		$test_case->temporal_result = new LiteTest\TestResult("some test");
 		
-		$this->assert_true($test_case->assert_false(false));
+		$test_case->assert_false(false);
+		$dummy = end($test_case->temporal_result->assertion_frames);
+		$d = $dummy->passed;
+		assert($d === true);
 		
-		$this->assert_false($test_case->assert_false(true));
-		$expected = "Failed asserting false for bool(true)\n";
-		$this->assert_equals($expected, $test_case->temporal_result->get_exception()->getMessage());
+		$test_case->assert_false(true);
+		$dummy = end($test_case->temporal_result->assertion_frames);
+		$d = $dummy->passed;
+		assert($d === false);
 	}
 	
 	function test_assert_equals()
@@ -51,24 +69,24 @@ class TestTestCase extends LiteTest\TestCase
 		$test_case = new TestingTestCase();
 		$test_case->temporal_result = new LiteTest\TestResult("some test");
 		
-		$this->assert_true($test_case->assert_equals("value", "value"));
+		$test_case->assert_equals("value", "value");
+		assert(end($test_case->temporal_result->assertion_frames)->passed === true);		
+
+		$test_case->assert_equals("value 1", "value 2");
+		assert(end($test_case->temporal_result->assertion_frames)->passed === false);		
 		
-		$this->assert_false($test_case->assert_equals("value 1", "value 2"));
-		$expected = "Failed asserting that expected:\nstring(7) "
-					."\"value 1\"\n\nequals given:\nstring(7) \"value 2\"\n";
-		$this->assert_equals($expected, $test_case->temporal_result->get_exception()->getMessage());
-		
-		$this->assert_false($test_case->assert_equals(true, 2));
+		$test_case->assert_equals(true, 2);
+		assert(end($test_case->temporal_result->assertion_frames)->passed === false);		
 	}
 	
 	function test_exception_testing()
 	{
 		try 
 		{
-			throw new Exception("some exception");
+			throw new \Exception("some exception");
 			$this->fail("Expected exception not thrown\n");
 		}
-		catch (Exception $exception)
+		catch (\Exception $exception)
 		{
 			if($exception->getMessage() != "some exception")
 				$this->fail("Expected exception not thrown\n");
@@ -85,21 +103,23 @@ class TestTestCase extends LiteTest\TestCase
 		$expected = array("test_one", "test_two");
 		$this->assert_equals($expected, $test_list);
 	}
-	
+	/** @todo Needs to be redone in light of use of assertion_frames */
 	function test_run()
 	{
 		$test_case = new TestingTestCase();
 		
 		$results = $test_case->run("TestingTestCase");
 	
-		$this->assert_true(is_array($results));
-		$this->assert_equals("LiteTest\TestResult", get_class($results["test_one"]));
-		$this->assert_equals("LiteTest\TestResult", get_class($results["test_two"]));
-		$this->assert_equals("test_one", $results["test_one"]->get_name());
-		$this->assert_equals(2, $results["test_one"]->count_assertions());
-		$this->assert_equals(9, $results["test_one"]->get_error_line());
-		$this->assert_true($results["test_one"]->get_running_time() > 0);
- 		$this->assert_true($results["test_two"]->get_running_time() > 0);
+		assert(is_array($results));
+		assert("LiteTest\TestResult" === get_class($results["test_one"]));
+		assert("LiteTest\TestResult" === get_class($results["test_two"]));
+		assert("test_one" === $results["test_one"]->get_name());
+		assert(2 === $results["test_one"]->count_assertions());
+		$ln = $results["test_one"]->assertion_frames[1]->line;
+		$f = $results["test_one"]->assertion_frames[1]->file;
+		assert(9 === $results["test_one"]->assertion_frames[1]->line);
+		assert($results["test_one"]->get_running_time() > 0.0);
+ 		assert($results["test_two"]->get_running_time() > 0.0);
 	}
 	
 	function test_befor_each()

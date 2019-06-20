@@ -31,7 +31,7 @@ class TestRunnerCLI extends TestRunner
 		// system("clear");
 
 		$this->run();
-		
+
 		echo PHP_EOL;
 
 		foreach($this->get_results() as $case_name => $test_results)
@@ -102,17 +102,37 @@ class TestRunnerCLI extends TestRunner
 			. $c("]")->reset()
 			. $c(" [{$running_time} ms] [$case_name] ")->reset()
 			. $c("{$result->get_name()}")->red()
-			. $c(" line {$result->get_error_line()}")->reset()
+			// . $c(" line {$result->get_error_line()}")->reset() - could be multiple assert fails
 			. PHP_EOL.PHP_EOL;
 
 		echo $line;
-
+		foreach ($result->assertion_frames as $frame) {
+			if (!$frame->passed) {
+				unset($frame->object);
+				echo $c("FAILED Assertion")->red()->bold();
+				if (count($frame->args) == 2) {
+					$arg0 = gettype($frame->args[0]) .":(" . var_export($frame->args[0], true) .")";
+					$arg1 = gettype($frame->args[1]) .":(" . var_export($frame->args[1], true) .")";
+					echo " {$frame->function}({$arg0},{$arg1}) FAIL ". PHP_EOL;
+				} else if (count($frame->args) == 1) {
+					$arg0 = gettype($frame->args[0]) .":(" . var_export($frame->args[0], true).")";
+					echo " {$frame->function}({$arg0}) FAIL ". PHP_EOL;
+				} else  if (count($frame->args) == 0) {
+					echo " {$frame->function}() FAIL ". PHP_EOL;
+				} else {
+					throw new \Exception("assert with wrong number");
+				}
+				echo "\t AT line: {$frame->line} file: {$frame->file} " . PHP_EOL;
+			}
+		}
+		return;
 		foreach($result->assertions as $assertion)
 		{
 			if( ! $assertion->result )
 			{
 				$exception  = $assertion->exception;
-				echo $exception->getMessage() . "AT ". $assertion->file_name ."]::" . $assertion->line_number."\n";
+				$prefix = $exception->getMessage();
+				echo $exception->getMessage() . " AT ". $assertion->file_name ."]::" . $assertion->line_number."\n";
 				if( $this->output_debug )
 				{
 					echo $exception->getTraceAsString().PHP_EOL;

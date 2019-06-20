@@ -14,6 +14,7 @@ class TestCaseMyClass2 extends LiteTest\TestCase
 	{
 		$my_class = new MyClass2();
 		$this->assert_true($my_class instanceof MyClass2);
+		$this->assert_equals("one", "two");
 	}
 	function test_2_my_class()
 	{
@@ -30,6 +31,8 @@ class TestCaseMyClass2 extends LiteTest\TestCase
 	{
 		$my_class = new MyClass2();
 		$this->assert_true($my_class instanceof MyClass2);
+		$this->assertEqual(1,32);
+		$this->assert_equals("one", "two");
 	}
 }
 

@@ -15,8 +15,16 @@ class TestCase
 	public $output_debug;
 
 	protected $temporal_result;
+	public $results;
+	public $my_result;
 	protected $backtraces;
 	
+	public function __construct()
+	{
+		$this->results = [];
+		$this->my_result = [];
+	}
+
 	function setOutputVerbose($onOff)
 	{
 		$this->output_verbose = $onOff;
@@ -25,23 +33,32 @@ class TestCase
 	{
 		$this->output_debug = $onOff;
 	}
-
+	/**
+	 * records a pass in $this->temporal_result->assertion
+	 * @todo - makew temporal_result->assertion deprecated
+	 */
 	public function pass()
 	{
+		$frame = $this->assert_called_from();
+		$this->record_pass($frame);
 		if($this->output_verbose) print ".";
 
 		$this->temporal_result->add_assertion(true);
+
 		return true;
 	}
-	
-	public function fail($message)
+	/**
+	 * records a failure in $this->temporal_result
+	 * 
+	 */
+	public function rec_fail($message)
 	{
 		if( $this->output_verbose) print "F";
 
 		$exception = new \Exception($message);
 		$this->store_exception($exception);
 		return false;
-	}
+	}	
 	
 	protected function store_exception(\Exception $exception)
 	{
@@ -64,9 +81,10 @@ class TestCase
 		{
 
 			$assert_funcs =[
-				'assert_true', 
+				'assert_true',
 				'assert_false', 
-				'assert_equal', 
+				'assert_equal',
+				'assert_equals',
 				'assertEqual', 
 				'assertEquals',
 				'asserTrue',
@@ -100,92 +118,170 @@ class TestCase
 
 		// $this->temporal_result->set_error_line($line);
 	}
+	public function record_pass($assert_frame)
+	{
+		$assert_frame->passed = true;
+		$this->results[] = $assert_frame;
+		$this->temporal_result->add_assertion_frame($assert_frame);
+		// record test_result[__CLASS__][$this->active_test] = $assert_frame;
+		// record_test_result(__CLASS__, $this->active_test, assertion_frame);
+	}
+	public function record_fail($assert_frame)
+	{
+		$assert_frame->passed = false;
+		$this->results[] = $assert_frame;
+		$this->temporal_result->add_assertion_frame($assert_frame);
+	}
+	public function assert_called_from()
+	{
+		$bt = debug_backtrace();
+		$frame = (object)$bt[1];
+		return $frame;
+	}
+	/**
+	 * Part of public interface to assert failure
+	 * 
+	 */
+	public function fail($message)
+	{
+		$frame = $this->assert_called_from();
+		$this->record_fail($frame);
+	}
+
 	public function assertNull($prove)
 	{
-		if($prove === null) return $this->pass();
-			
-		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove === null) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}			
 	public function assertNotNull($prove)
 	{
-		if($prove !== null) return $this->pass();
-			
-		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove !== null) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}		
 	public function assertTrue($prove)
 	{
-		if($prove === true) return $this->pass();
-			
-		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove === true) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}	
 	public function assertFalse($prove)
 	{
-		if($prove === false) return $this->pass();
-			
-		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove === false) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting False for {$this->variable_dump($prove)}");
 	}	
 	public function assertEqual($expected, $prove) 
 	{
+		$frame = $this->assert_called_from();
 		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
 					."\nequals given:\n".$this->variable_dump($prove);
 					
-		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove))
-			return $this->fail($fail_message);
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove)) {
+			$this->record_fail($frame);
+			return $this->rec_fail($fail_message);
+		}
 			
-		if($expected == $prove) return $this->pass();
-		
-		return $this->fail($fail_message);	
+		if($expected == $prove) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail($fail_message);	
 	}
 
 	public function assertEquals($expected, $prove) 
 	{
+		$frame = $this->assert_called_from();
 		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
 					."\nequals given:\n".$this->variable_dump($prove);
 					
-		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove))
-			return $this->fail($fail_message);
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove)) {
+			$this->record_fail($frame);
+			return $this->rec_fail($fail_message);
+		}
 			
-		if($expected == $prove) return $this->pass();
-		
-		return $this->fail($fail_message);	
+		if($expected == $prove) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail($fail_message);	
 	}
 	public function assertNotEqual($expected, $prove) 
 	{
+		$frame = $this->assert_called_from();
 		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
 					."\ndoes NOT equals given:\n".$this->variable_dump($prove);
 					
-		if((is_bool($prove) OR is_bool($expected)) AND ($expected === $prove))
-			return $this->fail($fail_message);
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected === $prove)) {
+			$this->record_fail($frame);
+			return $this->rec_fail($fail_message);
+		}
 			
-		if($expected != $prove) return $this->pass();
-		
-		return $this->fail($fail_message);	
+		if($expected != $prove) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail($fail_message);	
 	}
 	public function assert_true($prove)
 	{
-		if($prove === true) return $this->pass();
-			
-		return $this->fail("Failed asserting true for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove === true) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting true for {$this->variable_dump($prove)}");
 	}
 	
 	public function assert_false($prove)
 	{
-		if($prove === false) return $this->pass();
-			
-		return $this->fail("Failed asserting false for {$this->variable_dump($prove)}");
+		$frame = $this->assert_called_from();
+		if($prove === false) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail("Failed asserting false for {$this->variable_dump($prove)}");
 	}
 	
 	public function assert_equals($expected, $prove) 
 	{
+		$frame = $this->assert_called_from();
 		$fail_message = "Failed asserting that expected:\n".$this->variable_dump($expected)
 					."\nequals given:\n".$this->variable_dump($prove);
 					
-		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove))
-			return $this->fail($fail_message);
+		if((is_bool($prove) OR is_bool($expected)) AND ($expected !== $prove)) {
+			$this->record_fail($frame);
+			return $this->rec_fail($fail_message);
+		}
 			
-		if($expected == $prove) return $this->pass();
-		
-		return $this->fail($fail_message);	
+		if($expected == $prove) {
+			$this->record_pass($frame);
+			return $this->pass();
+		}
+		$this->record_fail($frame);
+		return $this->rec_fail($fail_message);	
 	}
 	
 	//
@@ -243,26 +339,23 @@ class TestCase
 		// throw new \Exception("got here");
 		$this->temporal_result = new TestResult($test_name);
 		$this->temporal_result->set_testcase($testcase);
-		
-		try
-		{
-			// print "\n{$testcase}::{$test_name} ";
+		$this->active_test = $test_name;
+		$this->my_result[$test_name] = [];	
+		try {
+			$this->active_test = $test_name;
 			$start_time = microtime(true);
 			$this->before_each();
 			$this->setUp();
 			$this->$test_name();
-		}
-		catch(Exception $exception)
-		{
+		} catch(\Exception $exception) {
 			$this->store_exception($exception);
 		}
 
 		$this->after_each();
+		$this->active_test = null;
 		$this->tearDown();
 		$result_time = microtime(true) - $start_time;
 		$this->temporal_result->set_running_time($result_time);		
-		// $r = ($this->temporal_result->passed())? "P":"F";
-		// print " $testcase::$test_name ". ($r)."\n";
 		return $this->temporal_result;
 	}
 	
@@ -274,11 +367,8 @@ class TestCase
 
 	protected function variable_dump($subject)
 	{
-		ob_start();
-			var_dump($subject);
-			$result = ob_get_contents();
-		ob_end_clean();
-		
+			$ss = var_export($subject, true);
+			$result = $ss; 
 		return $result;
 	}
 }
