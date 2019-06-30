@@ -49,7 +49,7 @@ class TestRunnerCLI extends TestRunner
 		echo "Failed tests: " . $this->total_failed ."  ";
 		echo "Total assertions: " . $this->total_assertions ."  ";
 		echo "Running time: " . $this->format_time($this->tests_running_time) . " ms";
-		echo PHP_EOL;
+		// echo PHP_EOL;
 	}
 	
 	protected function print_case_results($case_name, $test_results)
@@ -90,7 +90,7 @@ class TestRunnerCLI extends TestRunner
 
 		$c = new Color();
 		
-		$line = "\n"
+		$line = PHP_EOL
 			. $c("[")->reset()
 			. $c(self::FAIL)->red()
 			. $c("]")->reset()
