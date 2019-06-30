@@ -6,6 +6,7 @@ print __METHOD__." dirname 3 of file  ". dirname(dirname(dirname(__FILE__))) ."\
 print __METHOD__." dirname 4 of file  ". dirname(dirname(dirname(dirname(__FILE__)))) ."\n";
 
 $vendor_dir = dirname(dirname(dirname(dirname(__FILE__))));
+$vendor_dir = dirname(dirname(__FILE__));
 
 $info = new SplFileInfo($vendor_dir);
 

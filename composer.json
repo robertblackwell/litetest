@@ -6,7 +6,7 @@
     "type": "library",
     "homepage": "https://github.com/robertblackwell/litetest",
     "license": "MIT",
-    "bin": ["bin/litetest", "bin/litetest"],
+    "bin": ["bin/litetest", "bin/litetest.php"],
     "authors": [
         {
             "name":"robertblackwell",
