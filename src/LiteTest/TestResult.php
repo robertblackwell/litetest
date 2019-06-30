@@ -14,6 +14,7 @@ class TestResult
 	public $running_time = 0;
 	public $testcase_object;
 	public $testcase_name;
+	public $assertion_results;
 	
 	/**
 	*
@@ -25,6 +26,7 @@ class TestResult
 	{
 		$this->test_name = $test_name;
 		$this->test_results = [];
+		$this->assertion_results = [];
 		$this->testcase_object = $testcase_object;
 		$this->testcase_name = get_class($testcase_object);
 	}
@@ -90,7 +92,7 @@ class TestResult
 	}
 	
 	/**
-	* @param number $time Test runtime.
+	* @param mixed $time Test runtime.
 	* @return void
 	*/
 	public function set_running_time($time) : void
