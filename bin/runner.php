@@ -1,11 +1,11 @@
-#!/usr/bin/env php
 <?php
 $debug = false;
 $vendor_dir = dirname(dirname(__FILE__))."/vendor";
 
 if (! is_dir($vendor_dir)) {
 	// then running from installed package
-	print "running from package \n";
+	if ($debug)
+		print "running from package \n";
 	$vendor_dir = dirname(dirname(dirname(dirname(__FILE__))));
 }
 if ($debug) {
@@ -21,4 +21,3 @@ if ($info->getBasename() !== "vendor") {
 }
 require "{$vendor_dir}/autoload.php";
 include dirname(dirname(__FILE__))."/src/Main.php";
-?>
