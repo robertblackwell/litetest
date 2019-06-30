@@ -10,7 +10,7 @@ return [
 	'bootsttrap' => 'local.bootstrap.php',
 
 	//
-	// A lis of test case file
+	// A list of test case file
 	//
 	'tests' => [
 		'suite2.php',

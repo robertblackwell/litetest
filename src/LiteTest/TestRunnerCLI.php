@@ -43,13 +43,14 @@ class TestRunnerCLI extends TestRunner
 	
 	protected function print_summary()
 	{
-		echo "\n\n";
+		// echo "\n\n";
 		echo "Cases: " . sizeof($this->test_cases) . "  ";
 		echo "Passed tests: " . ($this->total_results + $this->total_failed) ."  ";
 		echo "Failed tests: " . $this->total_failed ."  ";
 		echo "Total assertions: " . $this->total_assertions ."  ";
 		echo "Running time: " . $this->format_time($this->tests_running_time) . " ms";
-		echo "\n\n";
+		echo "\n";
+		// echo "\n";
 	}
 	
 	protected function print_case_results($case_name, $test_results)

@@ -281,7 +281,8 @@ class TestCase
 			$this->setUp();
 			$this->$test_name();
 		} catch (\Exception $exception) {
-			$this->store_exception($exception);
+			// $this->store_exception($exception);
+			throw $exception;
 		}
 
 		$this->after_each();
