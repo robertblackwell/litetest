@@ -2,7 +2,7 @@
 namespace LiteTest;
 
 /**
-* 
+* Represents the result of a single assertion within a test within a testcase
 */
 class Assertion
 {
@@ -11,8 +11,11 @@ class Assertion
 	public $exception;
 	public $line_number;
 	public $file_name;
-
-	function __construct($result, $exception=null, $line_number=0, $file_name="")
+	/** 
+	* @param boolean $result PassFail for the assertion.
+	* @return Assertion
+	*/
+	function __construct(bool $result, $exception = null, $line_number = 0, $file_name = "")
 	{
 		$this->result = $result;
 		$this->result_string = ($result) ? "PASS" : "FAIL";

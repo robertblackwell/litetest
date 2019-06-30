@@ -7,7 +7,7 @@ $v = json_decode(file_get_contents($version_file));
 
 $v->patch++;
 
-file_put_contents($version_file, json_encode($v, JSON_PRETTY_PRINT) );
+file_put_contents($version_file, json_encode($v, JSON_PRETTY_PRINT));
 
 $major = $v->major .".";
 $minor = $v->minor .".";
@@ -26,4 +26,4 @@ class Version
 
 EOD;
 
-file_put_contents(dirname(__DIR__)."/classes/LiteTest/Version.php", $V);
+file_put_contents(dirname(__DIR__)."/src/LiteTest/Version.php", $V);

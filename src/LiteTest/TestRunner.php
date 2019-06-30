@@ -1,10 +1,11 @@
 <?php
 namespace LiteTest;
+
 use LiteTest;
 
 abstract class TestRunner
 {
-	public $test_cases = array();
+	public $test_cases = [];
 	public $test_results = array();
 
 	public $output_verbose;
@@ -14,14 +15,18 @@ abstract class TestRunner
 	const PASS = "PASS";
 	const FAIL = "FAIL";
 
+	public function __construct()
+	{
+	}
+
 	public function setOutputVerbose($onOff)
 	{
 		$this->output_verbose = $onOff;
-	}	
+	}
 
 	public function setOutputDebug($onOff)
 	{
-		$this->output_debug = $onOff;		
+		$this->output_debug = $onOff;
 	}
 	
 	public function add_test_case(TestCase $test_case)
@@ -37,9 +42,8 @@ abstract class TestRunner
 	
 	public function run()
 	{
-		foreach($this->test_cases as $case_name => $case)
-		{
-			$this->test_results[$case_name] = $case->run($case_name);
+		foreach ($this->test_cases as $case_name => $case) {
+			$this->test_results[$case_name] = $case->run();
 		}
 	}
 	

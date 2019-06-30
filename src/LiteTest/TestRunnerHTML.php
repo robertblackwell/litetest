@@ -1,8 +1,9 @@
 <?php
 namespace LiteTest;
+
 use LiteTest;
 
-class TestRunnerHTML extends TestRunner 
+class TestRunnerHTML extends TestRunner
 {
 	protected $total_results = 0;
 	protected $total_failed = 0;
@@ -11,8 +12,7 @@ class TestRunnerHTML extends TestRunner
 	public function get_output()
 	{
 		$output = "";
-		foreach($this->get_results() as $case_name => $test_results)
-		{
+		foreach ($this->get_results() as $case_name => $test_results) {
 			$output .= $this->get_case_results($case_name, $test_results);
 		}
 		
@@ -37,17 +37,13 @@ class TestRunnerHTML extends TestRunner
 		$output .= "<ul>\n";
 		
 		$case_result = true;
-		foreach($test_results as $one_result)
-		{
+		foreach ($test_results as $one_result) {
 			$this->total_assertions += $one_result->count_assertions();
 			
-			if($one_result->passed())
-			{
+			if ($one_result->passed()) {
 				$this->total_results++;
 				$output .= $this->get_test_pass($one_result);
-			}
-			else
-			{
+			} else {
 				$this->total_failed++;
 				$output .= $this->get_test_fail($one_result);
 				$case_result = false;
@@ -63,7 +59,7 @@ class TestRunnerHTML extends TestRunner
 	{
 		$class = "pass";
 		
-		if(!$case_result)
+		if (!$case_result)
 			$class = "fail";
 			
 		return "<div class='$class'>\n$output</div>";

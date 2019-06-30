@@ -8,14 +8,14 @@ TARGET := 	build/$(PHARNAME)
 PHARIZER := scripts/create-phar.php
 SRCPREFIX := `pwd`
 
-php :=  $(shell find classes -type f -name "*.php") $(shell find vendor/kevinlebrun -type f -name "*.php")  
+php :=  $(shell find src -type f -name "*.php") $(shell find vendor/kevinlebrun -type f -name "*.php")  
 
 build/litetest: $(TARGET)
 	# take the phar extension off the end
 
 $(TARGET): Makefile $(PHARIZER) $(php) bump
 	# create the phar
-	$(PHARIZER) $(TARGET) $(SRCPREFIX) classes/Stub.php classes vendor/kevinlebrun 
+	$(PHARIZER) $(TARGET) $(SRCPREFIX) src/Stub.php src vendor/kevinlebrun 
 	#make it executable
 	chmod 775 $(TARGET)
 

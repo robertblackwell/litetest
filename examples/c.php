@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__ ). '/vendor/autoload.php';
+require_once dirname(__DIR__). '/vendor/autoload.php';
 
 
 class Kolor extends Colors\Color
@@ -19,12 +19,12 @@ function color($string)
 	return new Colors\Color($string);
 }
 
-echo 
-	color('Hello World!')->red()->white() 
-	. color("some other text 1 ")->green() 
-	. color("some other text 2 ")->blue() 
-	. color("some other text 3 ")->yellow() 
-	. color("some other text 4 ")->white() 
+echo
+	color('Hello World!')->red()->white()
+	. color("some other text 1 ")->green()
+	. color("some other text 2 ")->blue()
+	. color("some other text 3 ")->yellow()
+	. color("some other text 4 ")->white()
 	. PHP_EOL;
 
 exit();

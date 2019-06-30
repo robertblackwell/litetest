@@ -1,10 +1,12 @@
 #!/usr/bin/env php
 <?php
 require_once(dirname(__FILE__)."/PHPFiles.php");
-/*
+/**
 ** Generalized somewhat to have arguments - the goal is not to have it depend on its environment
+* @return void
 */
-function print_usage(){
+function print_usage()
+{
 	print "
 		create-phar.php  target srcPrefix stub phpfiles ......
 
@@ -17,13 +19,13 @@ function print_usage(){
 	";
 }
 
-if( count($argv) <= 2 ) {
+if (count($argv) <= 2) {
 	die("too few arguments");
 	print_usage();
 }
 $projectRoot = dirname(dirname(__FILE__));
 print $projectRoot."\n";
-$srcRoot = dirname(__FILE__)."/classes";
+$srcRoot = dirname(__FILE__)."/src";
 
 $target = $argv[1];
 $phar_file = basename($target);
@@ -35,7 +37,7 @@ $finder = new \Mkphar\PHPFiles();
 
 $php_files = array();
 
-for($i = 4; $i < count($argv); $i++){
+for ($i = 4; $i < count($argv); $i++) {
 	print "adding path ".$argv[$i]." to the collection\n";
 	$finder->addPath($argv[$i]);
 }
