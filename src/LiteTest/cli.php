@@ -146,10 +146,10 @@ class Cli
 
 	/**
 	* Returns the value of the option whose key is given, null if not exists
-	* @param mixed $key The key for the option to be returned.
+	* @param string $key The key for the option to be returned.
 	* @return mixed
 	*/
-	public function getOptionValue($key)
+	public function getOptionValue(string $key)
 	{
 		if (isset($this->option_values[$key]))
 			return $this->option_values[$key]->value;
@@ -159,10 +159,11 @@ class Cli
 	* Returns the file_path value of the option whose key is given, null if not exists
 	*
 	* throws an exception if this option is not set as a file type
-	* @param mixed $key The key for which the value of a file path is returned.
-	* @return string
+	* @param string $key The key for which the value of a file path is returned.
+	* @return string|null
+	* @throws \Exception is option definition is not a file path
 	*/
-	public function getOptionFilePath($key)
+	public function getOptionFilePath(string $key) : ?string
 	{
 		if (isset($this->option_values[$key])) {
 			if ($this->option_values[$key]->definition->isFile === false)
