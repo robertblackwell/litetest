@@ -4,7 +4,7 @@ namespace LiteTest;
 /**
 * Represents the result of a single assertion within a test within a testcase
 */
-class Assertion
+class xAssertion
 {
 	public $result;
 	public $result_string;

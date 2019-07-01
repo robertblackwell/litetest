@@ -7,7 +7,7 @@ namespace LiteTest;
  * Essentially a list of test results for the given testcase
  *
  */
-class TestCaseResult
+class xTestCaseResult
 {
 	public $testcase_name;
 	public $testcase_object;

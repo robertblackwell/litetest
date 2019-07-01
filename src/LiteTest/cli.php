@@ -111,27 +111,32 @@ class Cli
 	// An object implementing  iCliCommand
 	//
 	public $command;
-
+	/**
+	 * @return Cli
+	 */
 	public function __construct()
 	{
 		$this->options = [];
 		$this->addOption()->shortName("h")->longName("help")->description("command help")->valueRequired(false);
 		$this->addOption()->shortName("V")->longName("version")->description("version number")->valueRequired(false);
 	}
-	//
-	// Adds an OptionDefinition to the Cli and allows chaining of the methods
-	// of OptionDefinition
-	//
+	/**
+	* Adds an OptionDefinition to the Cli and allows chaining of the methods
+	* of OptionDefinition
+	* @return OptionDefinition
+	*/
 	public function addOption()
 	{
 		$opt = new OptionDefinition();
 		$this->option_definitions[] = $opt;
 		return $opt;
 	}
-	//
-	// creates a command definition and allows chaining of
-	// the methods of CommandDefinition class
-	//
+	/**
+	* creates a command definition and allows chaining of
+	* the methods of CommandDefinition class
+	* @param iCliCommand $cmd A command to add to the cli.
+	* @return CommandDefinition
+	*/
 	function command(iCliCommand $cmd)
 	{
 		$this->command = new CommandDefinition();
@@ -139,20 +144,24 @@ class Cli
 		return $this->command;
 	}
 
-	//
-	// Returns the value of the option whose key is given, null if not exists
-	//
+	/**
+	* Returns the value of the option whose key is given, null if not exists
+	* @param mixed $key The key for the option to be returned.
+	* @return mixed
+	*/
 	public function getOptionValue($key)
 	{
 		if (isset($this->option_values[$key]))
 			return $this->option_values[$key]->value;
 		return null;
 	}
-	//
-	// Returns the file_path value of the option whose key is given, null if not exists
-	//
-	// throws an exception if this option is not set as a file type
-	//
+	/**
+	* Returns the file_path value of the option whose key is given, null if not exists
+	*
+	* throws an exception if this option is not set as a file type
+	* @param mixed $key The key for which the value of a file path is returned.
+	* @return string
+	*/
 	public function getOptionFilePath($key)
 	{
 		if (isset($this->option_values[$key])) {
@@ -162,6 +171,11 @@ class Cli
 		}
 		return null;
 	}
+	/**
+	 * Get a keyed array of options
+	 * @return array
+	 * 
+	 */
 	public function getOptions()
 	{
 		$result = [];
@@ -171,17 +185,20 @@ class Cli
 		return $result;
 	}
 
-	//
-	// Returns an array of the arguments that follow the options (program name NOT included)
-	//
+	/**
+	* Returns an array of the arguments that follow the options (program name NOT included)
+	* @return array
+	*
+	*/
 	public function getArguments()
 	{
 		return $this->arguments;
 	}
 
-	//
-	// Prints help text
-	//
+	/**
+	* Prints help text
+	* @return void
+	*/
 	public function help()
 	{
 		$name = $this->command->name;
@@ -213,16 +230,20 @@ class Cli
 			print "\t".$c($prefix)->yellow() ."\t\t" . $c($description)->white() . PHP_EOL;
 		}
 	}
-	//
-	// Prints version number
-	//
+	/**
+	* Prints version number
+	* @return void
+	*/
 	public function version()
 	{
 		print $this->command->object->version()."\n";
 	}
-	//
-	// run the command
-	//
+	/**
+	* run the command
+	* @param mixed $myargs Command line arguments argv in most cases.
+	* @return void
+	* exit with status code
+	*/
 	public function run($myargs)
 	{
 		try {
@@ -245,7 +266,11 @@ class Cli
 			print $e->getTraceAsString();
 		}
 	}
-
+	/**
+	 * @param mixed $key Key value of option for which definition is required.
+	 * @return mixed
+	 * 
+	 */
 	private function getOptionDefinition($key)
 	{
 		//
@@ -256,10 +281,12 @@ class Cli
 		return $this->isLongName($key);
 	}
 
-	//
-	// breaks argv out into options, their values and arguments after the options
-	// places the reult in this->parsed_options and $this->arguments
-	//
+	/**
+	* breaks argv out into options, their values and arguments after the options
+	* places the reult in this->parsed_options and $this->arguments
+	* @param mixed $my_args Command line arguments, usually argv.
+	* @return void
+	*/
 	private function parse($my_arg = null)
 	{
 		$cmd_args = [];
@@ -339,10 +366,12 @@ class Cli
 	   // return [$cmd_args, $args];
 	}
 
-	//
-	// Returns OptionDefinition if the given string is a shortName for one of the defined options
-	// false otherwise
-	//
+	/**
+	* Returns OptionDefinition if the given string is a shortName for one of the defined options
+	* false otherwise
+	* @param string $name Name of option for which definition is required.
+	* @return mixed
+	*/
 	private function isShortName($name)
 	{
 		foreach ($this->option_definitions as $option_def) {
@@ -352,10 +381,12 @@ class Cli
 		return false;
 	}
 
-	//
-	// Returns an OptionDefinition if the given string is a longName for one of the defined options
-	// false otherweise
-	//
+	/**
+	* Returns OptionDefinition if the given string is a shortName for one of the defined options
+	* false otherwise
+	* @param string $name Name of option for which definition is required.
+	* @return mixed
+	*/
 	private function isLongName($name)
 	{
 		foreach ($this->option_definitions as $option_def) {
@@ -366,13 +397,16 @@ class Cli
 	}
 
 	
-	//
-	// Validates that the options that were parsed conform to the definitions,
-	// 	-	they exist in the definition array
-	//	-	have a value if required
-	//  -   if should be a file we check the file exists using cwd as the base
-	//	-	puts the relevant info in $this->options_value
-	//
+	/**
+	* Validates that the options that were parsed conform to the definitions,
+	* 	-	they exist in the definition array
+	*	-	have a value if required
+	*  -   if should be a file we check the file exists using cwd as the base
+	*	-	puts the relevant info in $this->options_value
+	*
+	* @return void
+	* @throws \Exception If Invalid option found.
+	*/
 	private function validateOptions()
 	{
 		$option_values = [];
@@ -406,13 +440,26 @@ class Cli
 }
 
 
-
+/**
+ * Dummy implementatin of iCli inorder to do simple testing during development.
+ * 
+ */
 class Dummy implements iCliCommand
 {
+	/**
+	 * 
+	 * @return string
+	 */
 	function version()
 	{
 		return "v0.0.1";
 	}
+	/**
+	 * @param mixed $cli       Cli Instance to be executed.
+	 * @param array $options   Array of options for this cli execution.
+	 * @param array $arguments Array of argument values.
+	 * @return void
+	 */
 	function execute($cli, array $options, array $arguments)
 	{
 		print_r($cli->getOptions());

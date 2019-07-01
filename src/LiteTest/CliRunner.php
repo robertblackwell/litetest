@@ -7,7 +7,10 @@ use Colors\Color;
 
 class CliRunner extends TestRunner
 {
-	
+	/**
+	 * Runs a suite of tests.
+	 * @return void
+	 */
 	public function run()
 	{
 		$this->run();
