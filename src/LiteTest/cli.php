@@ -237,10 +237,13 @@ class Cli
 	*/
 	public function version()
 	{
-		$vs = file_get_contents(dirname(dirname(__FILE__))."/version.json");
-		$vo = new Release\SemVer\VersionObject($vs);
-		$v = $vo->vString();
-		print $v . "\n";
+		$versionFilePath = dirname(dirname(__FILE__))."/version.json";
+		$version = Release\Api\Version::getVersionString($versionFilePath);
+		print $version . "\n";
+		// $vs = file_get_contents(dirname(dirname(__FILE__))."/version.json");
+		// $vo = new Release\SemVer\VersionObject($vs);
+		// $v = $vo->vString();
+		// print $v . "\n";
 		// print $this->command->object->version()."\n";
 	}
 	/**

@@ -163,11 +163,11 @@
         },
         {
             "name": "robertblackwell/release",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "/Users/robertblackwell/git-repos/release",
-                "reference": "61311baecc2b5c4058e7faa8a237111d970f19ed"
+                "reference": "80d370e86f46887a2df6e4f6e77de802c4372c4b"
             },
             "require": {
                 "composer/semver": "^1.5",
@@ -205,7 +205,7 @@
                 "tag",
                 "version"
             ],
-            "time": "2019-07-23T05:38:06+00:00"
+            "time": "2019-07-23T06:34:35+00:00"
         },
         {
             "name": "ulrichsg/getopt-php",
