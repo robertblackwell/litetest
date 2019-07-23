@@ -1,12 +1,115 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "hash": "0e48b4322b6484c4e8ed7261786af25d",
-    "content-hash": "b4c55259e90762819474cb5106eb1545",
+    "content-hash": "05b4b9dcde8fa7f2a706fd21426c29c1",
     "packages": [
+        {
+            "name": "composer/semver",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/semver.git",
+                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/semver/zipball/46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
+                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.5 || ^5.0.5",
+                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Semver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de"
+                },
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                },
+                {
+                    "name": "Rob Bast",
+                    "email": "rob.bast@gmail.com",
+                    "homepage": "http://robbast.nl"
+                }
+            ],
+            "description": "Semver library that offers utilities, version constraint parsing and validation.",
+            "keywords": [
+                "semantic",
+                "semver",
+                "validation",
+                "versioning"
+            ],
+            "time": "2019-03-19T17:25:45+00:00"
+        },
+        {
+            "name": "czproject/git-php",
+            "version": "v3.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/czproject/git-php.git",
+                "reference": "a7b911b81a2fe626f748a4ac8955353c5777bc6c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/czproject/git-php/zipball/a7b911b81a2fe626f748a4ac8955353c5777bc6c",
+                "reference": "a7b911b81a2fe626f748a4ac8955353c5777bc6c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "nette/tester": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Pecha",
+                    "email": "janpecha@email.cz"
+                }
+            ],
+            "description": "Library for work with Git repository in PHP.",
+            "keywords": [
+                "git"
+            ],
+            "time": "2019-02-09T13:11:36+00:00"
+        },
         {
             "name": "kevinlebrun/colors.php",
             "version": "0.4.1",
@@ -56,7 +159,99 @@
                 "console",
                 "shell"
             ],
-            "time": "2014-12-23 01:23:37"
+            "time": "2014-12-23T01:23:37+00:00"
+        },
+        {
+            "name": "robertblackwell/release",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "/Users/robertblackwell/git-repos/release",
+                "reference": "61311baecc2b5c4058e7faa8a237111d970f19ed"
+            },
+            "require": {
+                "composer/semver": "^1.5",
+                "czproject/git-php": "^3.17",
+                "ulrichsg/getopt-php": "3.2.2"
+            },
+            "require-dev": {
+                "robertblackwell/litetest": "^2.0.0"
+            },
+            "bin": [
+                "bin/release.php",
+                "bin/release"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./src",
+                    "./test"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "robertblackwell",
+                    "homepage": "https://github.com/robertblackwell"
+                }
+            ],
+            "description": "simple release version and tag manager",
+            "homepage": "https://github.com/robertblackwell/release",
+            "keywords": [
+                "bump",
+                "semver",
+                "tag",
+                "version"
+            ],
+            "time": "2019-07-23T05:38:06+00:00"
+        },
+        {
+            "name": "ulrichsg/getopt-php",
+            "version": "3.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getopt-php/getopt-php.git",
+                "reference": "9df490db25bd192d074f5de4210e232a8ddbeda0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/getopt-php/getopt-php/zipball/9df490db25bd192d074f5de4210e232a8ddbeda0",
+                "reference": "9df490db25bd192d074f5de4210e232a8ddbeda0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^2.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GetOpt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ulrich Schmidt-Goertz",
+                    "email": "ulrich@schmidt-goertz.de"
+                },
+                {
+                    "name": "Thomas Flori",
+                    "email": "thflori@gmail.com"
+                }
+            ],
+            "description": "Command line arguments parser for PHP 5.4 - 7.1",
+            "homepage": "http://getopt-php.github.io/getopt-php",
+            "time": "2019-01-22T08:01:50+00:00"
         }
     ],
     "packages-dev": [],

@@ -13,8 +13,13 @@
             "homepage":"https://github.com/robertblackwell"
         }
     ],
-    
+	"repositories": [
+		{"type": "git","url": "/Users/robertblackwell/git-repos/release"}
+
+	],
+
 	"require": {
+		"robertblackwell/release":"^1.0.0",
         "kevinlebrun/colors.php": "0.*"
 
      },

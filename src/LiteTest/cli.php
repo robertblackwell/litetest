@@ -237,7 +237,11 @@ class Cli
 	*/
 	public function version()
 	{
-		print $this->command->object->version()."\n";
+		$vs = file_get_contents(dirname(dirname(__FILE__))."/version.json");
+		$vo = new Release\SemVer\VersionObject($vs);
+		$v = $vo->vString();
+		print $v . "\n";
+		// print $this->command->object->version()."\n";
 	}
 	/**
 	* run the command
@@ -453,6 +457,8 @@ class Dummy implements iCliCommand
 	 */
 	function version()
 	{
+		$vs = file_get_contents(dirname(dirname(__FILE__))."/version.json");
+		$s = Release\SemVer\VersionObject($vs);
 		return "v0.0.1";
 	}
 	/**
