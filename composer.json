@@ -7,6 +7,7 @@
     "homepage": "https://github.com/robertblackwell/litetest",
     "license": "MIT",
     "bin": ["bin/litetest", "bin/litetest.php"],
+    "minimum-stability":"dev",
     "authors": [
         {
             "name":"robertblackwell",
@@ -19,7 +20,7 @@
 	],
 
 	"require": {
-		"robertblackwell/release":"^1.0.0",
+		"robertblackwell/release":"dev-master",
         "kevinlebrun/colors.php": "0.*"
 
      },
