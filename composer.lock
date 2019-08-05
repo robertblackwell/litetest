@@ -4,112 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f89f8ee15d3121136a55ad41cdce021",
+    "content-hash": "e220896c3281da978e076114007fd499",
     "packages": [
-        {
-            "name": "composer/semver",
-            "version": "1.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/composer/semver.git",
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.3.2 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.5 || ^5.0.5",
-                "phpunit/phpunit-mock-objects": "2.3.0 || ^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Composer\\Semver\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nils Adermann",
-                    "email": "naderman@naderman.de",
-                    "homepage": "http://www.naderman.de"
-                },
-                {
-                    "name": "Jordi Boggiano",
-                    "email": "j.boggiano@seld.be",
-                    "homepage": "http://seld.be"
-                },
-                {
-                    "name": "Rob Bast",
-                    "email": "rob.bast@gmail.com",
-                    "homepage": "http://robbast.nl"
-                }
-            ],
-            "description": "Semver library that offers utilities, version constraint parsing and validation.",
-            "keywords": [
-                "semantic",
-                "semver",
-                "validation",
-                "versioning"
-            ],
-            "time": "2019-03-19T17:25:45+00:00"
-        },
-        {
-            "name": "czproject/git-php",
-            "version": "v3.17.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/czproject/git-php.git",
-                "reference": "a7b911b81a2fe626f748a4ac8955353c5777bc6c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/czproject/git-php/zipball/a7b911b81a2fe626f748a4ac8955353c5777bc6c",
-                "reference": "a7b911b81a2fe626f748a4ac8955353c5777bc6c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "nette/tester": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Pecha",
-                    "email": "janpecha@email.cz"
-                }
-            ],
-            "description": "Library for work with Git repository in PHP.",
-            "keywords": [
-                "git"
-            ],
-            "time": "2019-02-09T13:11:36+00:00"
-        },
         {
             "name": "kevinlebrun/colors.php",
             "version": "0.4.1",
@@ -163,16 +59,16 @@
         },
         {
             "name": "psr/container",
-            "version": "1.0.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/014d250daebff39eba15ba990eeb2a140798e77c",
+                "reference": "014d250daebff39eba15ba990eeb2a140798e77c",
                 "shasum": ""
             },
             "require": {
@@ -208,67 +104,20 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14T16:28:37+00:00"
-        },
-        {
-            "name": "robertblackwell/release",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "/Users/robertblackwell/git-repos/release",
-                "reference": "e7be4fb1cc52974a321da901c37b550c011cd09b"
-            },
-            "require": {
-                "composer/semver": "^1.5",
-                "czproject/git-php": "^3.17",
-                "symfony/console": "^4",
-                "ulrichsg/getopt-php": "3.2.2"
-            },
-            "require-dev": {
-                "robertblackwell/litetest": "^2.0.0"
-            },
-            "bin": [
-                "bin/release.php",
-                "bin/release"
-            ],
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "./src",
-                    "./test"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "robertblackwell",
-                    "homepage": "https://github.com/robertblackwell"
-                }
-            ],
-            "description": "simple release version and tag manager",
-            "homepage": "https://github.com/robertblackwell/release",
-            "keywords": [
-                "bump",
-                "semver",
-                "tag",
-                "version"
-            ],
-            "time": "2019-08-04T08:40:41+00:00"
+            "time": "2018-12-29T15:36:03+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v4.3.3",
+            "version": "4.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9"
+                "reference": "4f322b9d4a7a0cb26f06e91b840843d1bee526a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9",
-                "reference": "8b0ae5742ce9aaa8b0075665862c1ca397d1c1d9",
+                "url": "https://api.github.com/repos/symfony/console/zipball/4f322b9d4a7a0cb26f06e91b840843d1bee526a0",
+                "reference": "4f322b9d4a7a0cb26f06e91b840843d1bee526a0",
                 "shasum": ""
             },
             "require": {
@@ -279,7 +128,7 @@
             },
             "conflict": {
                 "symfony/dependency-injection": "<3.4",
-                "symfony/event-dispatcher": "<4.3",
+                "symfony/event-dispatcher": "<4.3|>=5",
                 "symfony/process": "<3.3"
             },
             "provide": {
@@ -287,12 +136,12 @@
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/config": "~3.4|~4.0",
-                "symfony/dependency-injection": "~3.4|~4.0",
+                "symfony/config": "^3.4|^4.0|^5.0",
+                "symfony/dependency-injection": "^3.4|^4.0|^5.0",
                 "symfony/event-dispatcher": "^4.3",
-                "symfony/lock": "~3.4|~4.0",
-                "symfony/process": "~3.4|~4.0",
-                "symfony/var-dumper": "^4.3"
+                "symfony/lock": "^4.4|^5.0",
+                "symfony/process": "^3.4|^4.0|^5.0",
+                "symfony/var-dumper": "^4.3|^5.0"
             },
             "suggest": {
                 "psr/log": "For using the console logger",
@@ -303,7 +152,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -330,20 +179,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-07-24T17:13:59+00:00"
+            "time": "2019-08-03T22:33:03+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.11.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
+                "reference": "626bb16c799983996863d1243eadf5bcb2cbb5bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
-                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/626bb16c799983996863d1243eadf5bcb2cbb5bd",
+                "reference": "626bb16c799983996863d1243eadf5bcb2cbb5bd",
                 "shasum": ""
             },
             "require": {
@@ -389,20 +238,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-02-06T07:57:58+00:00"
+            "time": "2019-08-01T10:49:16+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
-            "version": "v1.11.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php73.git",
-                "reference": "d1fb4abcc0c47be136208ad9d68bf59f1ee17abd"
+                "reference": "639cc79605c22d3404d4082dd3af0fec66e0e975"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/d1fb4abcc0c47be136208ad9d68bf59f1ee17abd",
-                "reference": "d1fb4abcc0c47be136208ad9d68bf59f1ee17abd",
+                "url": "https://api.github.com/repos/symfony/polyfill-php73/zipball/639cc79605c22d3404d4082dd3af0fec66e0e975",
+                "reference": "639cc79605c22d3404d4082dd3af0fec66e0e975",
                 "shasum": ""
             },
             "require": {
@@ -447,20 +296,20 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-02-06T07:57:58+00:00"
+            "time": "2019-06-29T06:17:32+00:00"
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v1.1.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d"
+                "reference": "3cd78bb952668d7bc1701f9599cf009353d50886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d",
-                "reference": "f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/3cd78bb952668d7bc1701f9599cf009353d50886",
+                "reference": "3cd78bb952668d7bc1701f9599cf009353d50886",
                 "shasum": ""
             },
             "require": {
@@ -505,61 +354,13 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-06-13T11:15:36+00:00"
-        },
-        {
-            "name": "ulrichsg/getopt-php",
-            "version": "3.2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/getopt-php/getopt-php.git",
-                "reference": "9df490db25bd192d074f5de4210e232a8ddbeda0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/getopt-php/getopt-php/zipball/9df490db25bd192d074f5de4210e232a8ddbeda0",
-                "reference": "9df490db25bd192d074f5de4210e232a8ddbeda0",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8",
-                "squizlabs/php_codesniffer": "^2.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "GetOpt\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ulrich Schmidt-Goertz",
-                    "email": "ulrich@schmidt-goertz.de"
-                },
-                {
-                    "name": "Thomas Flori",
-                    "email": "thflori@gmail.com"
-                }
-            ],
-            "description": "Command line arguments parser for PHP 5.4 - 7.1",
-            "homepage": "http://getopt-php.github.io/getopt-php",
-            "time": "2019-01-22T08:01:50+00:00"
+            "time": "2019-08-02T12:15:04+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": {
-        "robertblackwell/release": 20
-    },
+    "minimum-stability": "dev",
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

@@ -22,4 +22,4 @@ if ($info->getBasename() === "vendor") {
 	}
 	require "{$vendor_dir}/autoload.php";
 }
-include dirname(dirname(__FILE__))."/src/Main.php";
+include dirname(dirname(__FILE__))."/src/main.php";
