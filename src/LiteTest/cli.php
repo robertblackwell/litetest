@@ -1,4 +1,6 @@
 <?php
+use LiteTest\Version;
+
 // require_once dirname(dirname(__DIR__))."/vendor/autoload.php";
 //
 // This is a bit tricky - dont want to use composer autoload during the build of
@@ -237,8 +239,7 @@ class Cli
 	*/
 	public function version()
 	{
-		$versionFilePath = dirname(dirname(__FILE__))."/version.json";
-		$version = Release\Api\Version::getVersionString($versionFilePath);
+		$version = Version::getVersion();
 		print $version . "\n";
 		// $vs = file_get_contents(dirname(dirname(__FILE__))."/version.json");
 		// $vo = new Release\SemVer\VersionObject($vs);

@@ -21,9 +21,9 @@ abstract class TestRunner
 
 	/**
 	 * @param mixed $onOff Set verbose output to this state.
-	 * @return void
+	 * @return TestRunner
 	 */
-	public function setOutputVerbose($onOff) : void
+	public function setOutputVerbose($onOff) : TestRunner
 	{
 		if (is_null($onOff)) {
 			$this->output_verbose = false;
@@ -32,13 +32,14 @@ abstract class TestRunner
 		} else {
 			throw new \Exception("onOff must be bool or null");
 		}
+		return $this;
 	}
 
 	/**
 	 * @param mixed $onOff Set denug output to this state.
-	 * @return void
+	 * @return TestRunner
 	 */
-	public function setOutputDebug($onOff) : void
+	public function setOutputDebug($onOff) : TestRunner
 	{
 		if (is_null($onOff)) {
 			$this->output_debug = false;
@@ -47,6 +48,7 @@ abstract class TestRunner
 		} else {
 			throw new \Exception("onOff must be bool or null");
 		}
+		return $this;
 	}
 	
 	/**

@@ -1,27 +1,10 @@
 <?php
+namespace LiteTest\Actions;
 
-//require_once dirname(dirname(__DIR__))."/vendor/autoload.php";
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-//
-// This is a REALLY simple command line tool to run unit tests with LiteTest.
-//
-//  The basic requirements are:
-//
-//  -   it must take a list of test suite files via some form of config file
-//		(either named as a command option  or from a default location like ./LiteTest.js)
-//
-//	-	must be able to take a boostrap.php file on the command line so that test suite
-//		can be run against multiple 'environments'. And in the absense of the command line
-//		option the bootstrap must be deduced from the config file, so that
-//
-//	- 	individual test suites can be run by simply naming a php file as the ONLY argument or option
-//
-//
-
-require_once __DIR__."/cli.php";
-require_once __DIR__."/Version.php";
-
-class LiteTestCommand implements iCliCommand
+class Run
 {
 
 	const CONFIG_FILE = "config-file";
@@ -31,7 +14,7 @@ class LiteTestCommand implements iCliCommand
 	const CONFIG_FILE_NAME= "litetest.config.php";
 	const TEST_CLASS_REGEX="/(^Test|Test$)/i";
 
-	public $cli;
+	public $input;
 	public $args;
 	public $options;
 	public $cwd;
@@ -52,13 +35,6 @@ class LiteTestCommand implements iCliCommand
 		exit();
 	}
 
-	/** @return string */
-	public function version()
-	{
-		return "v". LiteTest\Version::getVersion();
-		return "v.0.0.101";
-	}
-
 	/**
 	* Get a list of php files that are to be loaded either from the config file
 	* or as arguments to the command. Arguments take precedence
@@ -72,8 +48,8 @@ class LiteTestCommand implements iCliCommand
 		//
 		if ($this->debug) print __METHOD__."no arguments - look to config file \n";
 		
-		if (null !== $this->cli->getOptionValue(self::CONFIG_FILE)) {
-			$this->config_file_path = $this->cli->getOptionFilePath(self::CONFIG_FILE_NAME);
+		if (null !== $this->input->getOption(self::CONFIG_FILE)) {
+			$this->config_file_path = $this->input->getOptionFilePath(self::CONFIG_FILE_NAME);
 		} else {
 			$this->config_file_path = $this->cwd."/".self::CONFIG_FILE_NAME;
 		}
@@ -135,9 +111,13 @@ class LiteTestCommand implements iCliCommand
 	{
 		if ($this->debug) 
 			print __METHOD__."\n";
-		if (null !== $this->cli->getOptionValue(self::BOOTSTRAP_FILE)) {
+		if (null !== $this->input->getOption(self::BOOTSTRAP_FILE)) {
 			if ($this->debug) print "bootstrap from options\n";
-			$this->bootstrap_file = $this->cli->getOptionFilePath('bootstrap-file');
+			$this->bootstrap_file = 
+				$this->tests_relative_to 
+				."/"
+				. $this->input->getOption(self::BOOTSTRAP_FILE);
+
 		} elseif (isset($this->config->bootstrap)) {
 			if ($this->debug) print "bootstrap from config \n";
 			$this->bootstrap_file = $this->cwd. "/". $this->config->bootstrap;
@@ -157,24 +137,23 @@ class LiteTestCommand implements iCliCommand
 	}
 
 	/**
-	 * @param mixed $cli       Cli Instance to be executed.
-	 * @param array $options   Array of options for this cli execution.
-	 * @param array $arguments Array of argument values.
+	 * @param mixed $input  InpuInterface.
+	 * @param mixed $output OutputInterface.
 	 * @return void
 	 */
-	public function execute($cli, array $options, array $args)
+	public function execute(InputInterface $input, OutputInterface $output)
 	{
-		$this->cli = $cli;
-		$this->args = $cli->getArguments();
+		$this->input = $input;
+		$this->output = $output;
+		$this->args = $input->getArgument('testcases');
 		$this->cwd = getcwd();
-		$this->debug = false;
-		$this->debug = $cli->getOptionValue('debug') ;
-
-		// print_r($cli->getOptions());
-		// print_r($cli->getArguments());
+		$x = $input->getOption('debug');
+		$this->debug = $input->getOption('debug');
+		$this->verbose = $output->isVerbose();
 
 		$this->setup();
-		if ($this->debug) print __METHOD__." after setup \n";
+		if ($this->debug)
+			$output->writeln(__METHOD__." after setup");
 
 		//
 		// Load the bootstrap file
@@ -206,10 +185,6 @@ class LiteTestCommand implements iCliCommand
 
 		$classes_to_test = array_diff($after, $before_classes);
 
-		// print __METHOD__."\n";
-		// print_r($classes_to_test);
-		// print __METHOD__."\n";
-
 		foreach ($classes_to_test as $klass) {
 			// if( preg_match("/^Test/", $klass) )
 			if (preg_match(self::TEST_CLASS_REGEX, $klass)) {
@@ -220,24 +195,22 @@ class LiteTestCommand implements iCliCommand
 			}
 		}
 
-
-		$runner = new \LiteTest\TestRunnerCLI();
-
-		$runner->setOutputDebug($this->cli->getOptionValue('debug'));
-		$runner->setOutputVerbose($this->cli->getOptionValue('verbose'));
+		$runner = (new \LiteTest\TestRunnerCLI())
+			->setOutputDebug($this->debug)
+			->setOutputVerbose($this->verbose);
 
 		foreach ($testClasses as $suite) {
 			$suite_obj = new $suite();
 
-			$suite_obj->setOutputDebug($this->cli->getOptionValue('debug'));
-			$suite_obj->setOutputVerbose($this->cli->getOptionValue('verbose'));
+			$suite_obj->setOutputDebug($this->debug);
+			$suite_obj->setOutputVerbose($this->verbose);
 
 			$runner->add_test_case($suite_obj);
 		}
 		//
 		// Test for empty set of tests
 		//
-		$cc = new Colors\Color();
+		$cc = new \Colors\Color();
 		if (count($testClasses) == 0) {
 			echo $cc("WARNING ")->red()->bold();
 			echo $cc("  No classes have been named to be test Suites (Test????) - ")->reset();
@@ -256,45 +229,6 @@ class LiteTestCommand implements iCliCommand
 				}
 			}
 		}
-
 		$runner->print_results();
 	}
 }
-
-
-$cli = new Cli();
-$cli->addOption()
-	->shortName('c')->longname(LiteTestCommand::CONFIG_FILE)
-	->key(LiteTestCommand::CONFIG_FILE)
-	->valueRequired(true)
-	->setIsFile()
-	->description("json config file");
-
-$cli->addOption()
-	->shortName('b')->longname(LiteTestCommand::BOOTSTRAP_FILE)
-	->key(LiteTestCommand::BOOTSTRAP_FILE)
-	->valueRequired(true)
-	->setIsFile()
-	->description("php bootstrap file");
-
-$cli->addOption()
-	->shortName("v")
-	// ->longName("verbose")
-	->key('verbose')
-	->valueRequired(false)
-	->description("verbose")->valueRequired(false);
-
-$cli->addOption()
-	->shortName("d")
-	// ->longName("debug")
-	->key('debug')
-	->valueRequired(false)
-	->description("debug")->valueRequired(false);
-
-$cli->command(new LiteTestCommand())
-	->name("LiteTest")
-	->description("Run php test cases using LiteTest framework")
-	->usage("[options] [arguments]")
-	->help("Runs php test cases with LiteTest framework");
-
-$cli->run($argv);
