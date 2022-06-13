@@ -11,7 +11,7 @@ class CliRunner extends TestRunner
 	 * Runs a suite of tests.
 	 * @return void
 	 */
-	public function run()
+	public function run() : void
 	{
 		$this->run();
 		$formatter = new Formatter\Plaintext();

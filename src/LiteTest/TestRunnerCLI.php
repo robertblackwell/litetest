@@ -20,7 +20,7 @@ class TestRunnerCLI extends TestRunner
 	
 	public function __construct($test_case = null)
 	{
-		if (!empty($test_case) && ($test_case instanceof TestCase)) {
+		if (! empty($test_case) && ($test_case instanceof TestCase)) {
 			$this->add_test_case($test_case);
 			$this->print_results();
 		}
@@ -44,12 +44,12 @@ class TestRunnerCLI extends TestRunner
 	protected function print_summary()
 	{
 		echo PHP_EOL;
-		echo "Cases: " . sizeof($this->test_cases) . "  ";
+		echo "Cases: " . count($this->test_cases) . "  ";
 		echo "Passed tests: " . ($this->total_results + $this->total_failed) ."  ";
 		echo "Failed tests: " . $this->total_failed ."  ";
 		echo "Total assertions: " . $this->total_assertions ."  ";
 		echo "Running time: " . $this->format_time($this->tests_running_time) . " ms";
-		// echo PHP_EOL;
+		echo PHP_EOL;
 	}
 	
 	protected function print_case_results($case_name, $test_results)
@@ -76,8 +76,7 @@ class TestRunnerCLI extends TestRunner
 
 		$c = new Color();
 
-		echo
-			PHP_EOL
+		echo PHP_EOL
 			. $c("[")->reset()
 			. $c(self::PASS)->green()->bold()
 			. $c("] [{$running_time} ms] [$case_name] {$result->get_name()}")->reset();
@@ -101,7 +100,7 @@ class TestRunnerCLI extends TestRunner
 
 		echo $line;
 		foreach ($result->assertion_results as $result) {
-			if (!$result->passed) {
+			if (! $result->passed) {
 				$frame = $result->frame->stack[0];
 				unset($frame->object);
 				echo $c("FAILED Assertion")->red()->bold();
