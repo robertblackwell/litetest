@@ -6,21 +6,16 @@
     "homepage": "https://github.com/robertblackwell/litetest",
     "license": "MIT",
     "bin": ["bin/litetest", "bin/litetest.php"],
-    "minimum-stability":"dev",
+    "minimum-stability":"stable",
     "authors": [
         {
             "name":"robertblackwell",
             "homepage":"https://github.com/robertblackwell"
         }
     ],
-	"repositories": [
-		{"type": "git","url": "/Users/robertblackwell/git-repos/release"}
-
-	],
-
 	"require": {
         "kevinlebrun/colors.php": "^1.0.3",
-        "symfony/console": "^4.0.0"
+        "symfony/console": "^5.4.28"
 
      },
     "autoload": {
