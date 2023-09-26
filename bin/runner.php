@@ -20,4 +20,4 @@ if ($info->getBasename() !== "vendor") {
 	throw new \Exception("require vendor autoload is asking for wrong file {$vendor_dir}");
 }
 require "{$vendor_dir}/autoload.php";
-include dirname(dirname(__FILE__))."/src/main.php";
+include dirname(dirname(__FILE__))."/src/SymfonyMain.php";
