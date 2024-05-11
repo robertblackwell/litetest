@@ -15,7 +15,7 @@
     ],
 	"require": {
         "kevinlebrun/colors.php": "^1.0.3",
-        "symfony/console": "^5.4.28"
+        "symfony/console": "^6.4.6"
 
      },
     "autoload": {
