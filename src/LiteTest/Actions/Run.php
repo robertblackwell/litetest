@@ -15,13 +15,17 @@ class Run
 	const TEST_CLASS_REGEX="/(^Test|Test$)/i";
 
 	public $input;
+	public $output;
 	public $args;
 	public $options;
 	public $cwd;
+	public $tests;
 	public $tests_relative_to;
 	public $config;
 	public $config_file_path;
 	public $debug;
+	public $bootstrap_file;
+	public $verbose;
 
 	/**
 	 * @param $msg A text message to use when throwing a fatal error

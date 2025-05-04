@@ -50,6 +50,7 @@ class RunCommand extends Command
 	{
 		$action = new \LiteTest\Actions\Run();
 		$action->execute($input, $output);
-		return 0;
+
+
 	}
 }

@@ -13,7 +13,8 @@ class TestCase
 
 	public $output_verbose;
 	public $output_debug;
-	
+	public $active_test;
+	public $test_results;
 	/** @var AssertionResult $active_result */
 	protected $active_result;
 

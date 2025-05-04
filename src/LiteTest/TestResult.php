@@ -15,6 +15,7 @@ class TestResult
 	public $testcase_object;
 	public $testcase_name;
 	public $assertion_results;
+	public $test_results;
 	
 	/**
 	*
