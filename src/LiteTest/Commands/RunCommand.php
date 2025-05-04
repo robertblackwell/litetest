@@ -46,11 +46,10 @@ class RunCommand extends Command
 	* @param OutputInterface $output Output object.
 	* @return integer
 	*/
-	protected function execute(InputInterface $input, OutputInterface $output)
+	protected function execute(InputInterface $input, OutputInterface $output): int
 	{
 		$action = new \LiteTest\Actions\Run();
 		$action->execute($input, $output);
-
-
+		return 0;
 	}
 }
